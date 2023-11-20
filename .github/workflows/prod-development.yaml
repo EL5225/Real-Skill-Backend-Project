@@ -1,9 +1,9 @@
-name: Deploy DEVELOP Environment
+name: Deploy PRODUCTION Environment
 
 on:
   push:
     branches:
-      - develop
+      - production
 
 jobs:
   deploy:

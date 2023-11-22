@@ -2,10 +2,10 @@
   "name": "real-skill",
   "version": "1.0.0",
   "description": "FInal project BEJS 1 - FEJS 2 Binar Academy",
-  "main": "index.js",
   "license": "MIT",
   "scripts": {
     "dev": "nodemon app.js",
+    "start": "node app.js",
     "migrate": "prisma migrate dev",
     "db-pull": "prisma db pull"
   },

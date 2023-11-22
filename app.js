@@ -4,10 +4,9 @@ const { PORT } = process.env;
 const express = require("express");
 const cors = require("cors");
 const router = require("./routes");
-const {
-  notFoundHandler,
-  internalErrorHandler,
-} = require("./middlewares/error");
+const { notFoundHandler, internalErrorHandler } = require("./middlewares/error");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocs = require("./docs/swagger.json");
 
 const app = express();
 
@@ -23,11 +22,10 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/api", router);
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Middlewares errors
 app.use(notFoundHandler);
 app.use(internalErrorHandler);
 
-app.listen(PORT, () =>
-  console.log(`Server running at http://localhost:${PORT}`)
-);
+app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));

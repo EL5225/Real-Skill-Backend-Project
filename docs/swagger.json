@@ -7,6 +7,9 @@
   },
   "servers": [
     {
+      "url": "https://cyan-troubled-camel.cyclic.app/api"
+    },
+    {
       "url": "http://localhost:3000/api"
     }
   ],

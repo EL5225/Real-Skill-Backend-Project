@@ -10,3 +10,83 @@ datasource db {
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
+
+model User {
+  id           Int            @id @default(autoincrement())
+  name         String?
+  email        String         @unique
+  password     String?
+  is_verified  Boolean        @default(false)
+  resetToken   String?        @unique
+  notification Notification[]
+  pembayaran   Pembayaran[]
+  kelas        Kelas[]
+  role         Role           @default(USER)
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Notification {
+  id      Int    @id @default(autoincrement())
+  title   String
+  body    String
+  user_id Int
+  user    User   @relation(fields: [user_id], references: [id])
+}
+
+model Video {
+  id         Int     @id @default(autoincrement())
+  judul      String
+  link_video String
+  kelas      Kelas[]
+}
+
+model Kelas {
+  id         Int          @id @default(autoincrement())
+  nama_kelas String
+  kode_kelas String
+  harga      String
+  materi     String
+  video_id   Int
+  kategori   Kategori[]
+  level      Level[]
+  tipe       Tipe[]
+  Pembayaran Pembayaran[]
+  video      Video        @relation(fields: [video_id], references: [id])
+  admin_id   Int
+  admin      User         @relation(fields: [admin_id], references: [id])
+}
+
+model Kategori {
+  id                 Int    @id @default(autoincrement())
+  nama_kategori      String
+  thumbnail_kategori String
+  kelas_id           Int
+  kelas              Kelas  @relation(fields: [kelas_id], references: [id])
+}
+
+model Level {
+  id         Int    @id @default(autoincrement())
+  nama_level String
+  kelas_id   Int
+  kelas      Kelas  @relation(fields: [kelas_id], references: [id])
+}
+
+model Tipe {
+  id        Int    @id @default(autoincrement())
+  nama_tipe String
+  kelas_id  Int
+  kelas     Kelas  @relation(fields: [kelas_id], references: [id])
+}
+
+model Pembayaran {
+  id         Int    @id @default(autoincrement())
+  no_telepon String
+  kelas_id   Int
+  user_id    Int
+  kelas      Kelas  @relation(fields: [kelas_id], references: [id])
+  user       User   @relation(fields: [user_id], references: [id])
+}

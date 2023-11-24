@@ -1,6 +1,0 @@
-# [START app_yaml]
-runtime: nodejs16
-
-build_env_variables:
-  GOOGLE_NODE_RUN_SCRIPTS: ""
-# [END app_yaml]

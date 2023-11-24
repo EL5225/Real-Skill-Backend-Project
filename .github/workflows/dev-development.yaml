@@ -25,3 +25,6 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.PRISMA_DATABASE_URL }}
           DIRECT_URL: ${{ secrets.PRISMA_DIRECT_URL }}
+
+      - name: Run Prisma Generate
+        run: npx prisma generate

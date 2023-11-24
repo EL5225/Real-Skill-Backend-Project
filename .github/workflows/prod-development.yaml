@@ -19,3 +19,6 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+
+      - name: Run Prisma Generate
+        run: npx prisma generate

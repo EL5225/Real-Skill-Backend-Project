@@ -6,7 +6,8 @@
     "dev": "nodemon app.js",
     "start": "node app.js",
     "migrate": "prisma migrate dev",
-    "db-pull": "prisma db pull"
+    "db-pull": "prisma db pull",
+    "gcp-build": ""
   },
   "engines": {
     "node": ">=16.0.0"

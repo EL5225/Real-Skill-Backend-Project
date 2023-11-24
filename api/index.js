@@ -3,15 +3,15 @@ const { PORT } = process.env;
 
 const express = require("express");
 const cors = require("cors");
-const router = require("./routes");
+const router = require("../routes");
 const {
   notFoundHandler,
   internalErrorHandler,
   prismaErrorHandler,
   zodErrorHandler,
-} = require("./middlewares/error");
+} = require("../middlewares/error");
 const swaggerUi = require("swagger-ui-express");
-const swaggerDocs = require("./docs/swagger.json");
+const swaggerDocs = require("../docs/swagger.json");
 
 const app = express();
 

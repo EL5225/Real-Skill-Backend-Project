@@ -8,9 +8,10 @@ const swaggerDocs = require("../docs/swagger.json");
 const router = Router();
 
 router.get("/", (req, res) => {
-  res.setHeader("Content-Type", "text/html");
-  res.setHeader("Cache-Control", "s-max-age=1, stale-while-revalidate");
-  res.end("<p>Hello from API!</p>");
+  res.json({
+    status: true,
+    message: "Hello from API!",
+  });
 });
 
 router.use("/auth", auth);

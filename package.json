@@ -7,7 +7,7 @@
     "start": "node app.js",
     "migrate": "prisma migrate dev",
     "db-pull": "prisma db pull",
-    "gcp-build": ""
+    "run gcp-build": ""
   },
   "engines": {
     "node": ">=16.0.0"

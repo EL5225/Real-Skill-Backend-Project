@@ -57,6 +57,10 @@
                               "type": "string",
                               "example": "l@gmail.com"
                             },
+                            "role": {
+                              "type": "string",
+                              "example": "USER"
+                            },
                             "createdAt": {
                               "type": "string",
                               "format": "date-time",
@@ -193,9 +197,13 @@
                   "type": "string",
                   "example": "luthfi123"
                 },
-                "phoneNumber": {
+                "phone_number": {
                   "type": "string",
                   "example": "08123456789"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "USER"
                 }
               }
             }

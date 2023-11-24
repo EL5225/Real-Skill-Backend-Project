@@ -4,7 +4,12 @@ const { PORT } = process.env;
 const express = require("express");
 const cors = require("cors");
 const router = require("./routes");
-const { notFoundHandler, internalErrorHandler } = require("./middlewares/error");
+const {
+  notFoundHandler,
+  internalErrorHandler,
+  prismaErrorHandler,
+  zodErrorHandler,
+} = require("./middlewares/error");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocs = require("./docs/swagger.json");
 
@@ -25,6 +30,8 @@ app.use("/api", router);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Middlewares errors
+app.use(zodErrorHandler);
+app.use(prismaErrorHandler);
 app.use(notFoundHandler);
 app.use(internalErrorHandler);
 

@@ -21,6 +21,8 @@ model User {
   payment      Payments[]
   class        Classes[]
   role         Role            @default(USER)
+  profile      Profiles?
+  created_at   DateTime        @default(now())
 }
 
 enum Role {
@@ -28,20 +30,38 @@ enum Role {
   ADMIN
 }
 
+model Profiles {
+  id              String   @id @default(uuid())
+  profile_picture String?
+  phone_number    String?
+  updated_at      DateTime @default(now()) @updatedAt
+  user_id         String   @unique
+  user            User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
 model Notifications {
   id      String @id @default(uuid())
   title   String
   body    String
   user_id String
-  user    User   @relation(fields: [user_id], references: [id])
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model Videos {
-  id       String  @id @default(uuid())
-  title    String
-  link     String
-  class_id String
-  class    Classes @relation(fields: [class_id], references: [id])
+  id          String    @id @default(uuid())
+  title       String
+  link        String
+  time        Int
+  class_id    String
+  class       Classes   @relation(fields: [class_id], references: [id])
+  Chapters    Chapters? @relation(fields: [chapters_id], references: [id])
+  chapters_id String?
+}
+
+model Chapters {
+  id    String   @id @default(uuid())
+  title String
+  video Videos[]
 }
 
 model Classes {
@@ -58,6 +78,7 @@ model Classes {
   admin             User         @relation(fields: [admin_id], references: [id])
   type              Types?
   payment           Payments?
+  created_at        DateTime     @default(now())
 }
 
 model Categories {

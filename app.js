@@ -26,6 +26,6 @@ app.use(prismaErrorHandler);
 app.use(notFoundHandler);
 app.use(internalErrorHandler);
 
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+app.listen(PORT || 8080, () => console.log(`Server running at http://localhost:${PORT}`));
 
 module.exports = app;

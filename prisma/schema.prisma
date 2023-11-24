@@ -12,16 +12,15 @@ datasource db {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
+  id           String          @id @default(uuid())
   name         String?
-  email        String         @unique
+  email        String          @unique
   password     String?
-  is_verified  Boolean        @default(false)
-  resetToken   String?        @unique
-  notification Notification[]
-  pembayaran   Pembayaran[]
-  kelas        Kelas[]
-  role         Role           @default(USER)
+  is_verified  Boolean         @default(false)
+  notification Notifications[]
+  payment      Payments[]
+  class        Classes[]
+  role         Role            @default(USER)
 }
 
 enum Role {
@@ -29,64 +28,65 @@ enum Role {
   ADMIN
 }
 
-model Notification {
-  id      Int    @id @default(autoincrement())
+model Notifications {
+  id      String @id @default(uuid())
   title   String
   body    String
-  user_id Int
+  user_id String
   user    User   @relation(fields: [user_id], references: [id])
 }
 
-model Video {
-  id         Int     @id @default(autoincrement())
-  judul      String
-  link_video String
-  kelas      Kelas[]
+model Videos {
+  id       String  @id @default(uuid())
+  title    String
+  link     String
+  class_id String
+  class    Classes @relation(fields: [class_id], references: [id])
 }
 
-model Kelas {
-  id         Int          @id @default(autoincrement())
-  nama_kelas String
-  kode_kelas String
-  harga      String
-  materi     String
-  video_id   Int
-  kategori   Kategori[]
-  level      Level[]
-  tipe       Tipe[]
-  Pembayaran Pembayaran[]
-  video      Video        @relation(fields: [video_id], references: [id])
-  admin_id   Int
-  admin      User         @relation(fields: [admin_id], references: [id])
+model Classes {
+  id                String       @id @default(uuid())
+  name              String
+  code              String
+  price             String
+  learning_material String
+  categories        Categories[]
+  level             Levels[]
+  video_id          String
+  video             Videos[]
+  admin_id          String
+  admin             User         @relation(fields: [admin_id], references: [id])
+  type              Types?
+  payment           Payments?
 }
 
-model Kategori {
-  id                 Int    @id @default(autoincrement())
-  nama_kategori      String
-  thumbnail_kategori String
-  kelas_id           Int
-  kelas              Kelas  @relation(fields: [kelas_id], references: [id])
+model Categories {
+  id        String  @id @default(uuid())
+  name      String
+  thumbnail String
+  class_id  String
+  class     Classes @relation(fields: [class_id], references: [id])
 }
 
-model Level {
-  id         Int    @id @default(autoincrement())
-  nama_level String
-  kelas_id   Int
-  kelas      Kelas  @relation(fields: [kelas_id], references: [id])
+model Levels {
+  id       String  @id @default(uuid())
+  name     String
+  class_id String
+  class    Classes @relation(fields: [class_id], references: [id])
 }
 
-model Tipe {
-  id        Int    @id @default(autoincrement())
-  nama_tipe String
-  kelas_id  Int
-  kelas     Kelas  @relation(fields: [kelas_id], references: [id])
+model Types {
+  id       String  @id @default(uuid())
+  name     String
+  class_id String  @unique
+  class    Classes @relation(fields: [class_id], references: [id])
 }
 
-model Pembayaran {
-  id         Int    @id @default(autoincrement())
-  no_telepon String
-  kelas_id   Int
-  user_id    Int
-  kelas      Kelas  @relation(fields: [kelas_id], references: [id])
-  user       User   @relation(fields: [user_id], references: [id])
+model Payments {
+  id       String  @id @default(uuid())
+  is_paid  Boolean @default(false)
+  class_id String  @unique
+  class    Classes @relation(fields: [class_id], references: [id])
+  user_id  String
+  user     User    @relation(fields: [user_id], references: [id])
 }

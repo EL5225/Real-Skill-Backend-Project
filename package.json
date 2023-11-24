@@ -4,8 +4,8 @@
   "description": "FInal project BEJS 1 - FEJS 2 Binar Academy",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon ./api/index.js",
-    "start": "node ./api/app.js",
+    "dev": "nodemon app.js",
+    "start": "node app.js",
     "migrate": "prisma migrate dev",
     "db-pull": "prisma db pull"
   },

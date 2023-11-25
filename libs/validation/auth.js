@@ -18,6 +18,13 @@ const VSRegister = z.object({
   role: z.string().optional(),
 });
 
+const VSLogin = z.object({
+  email: z.string({ required_error: "Email harus diisi" }).email({ message: "Email harus valid" }),
+  password: z.string({ required_error: "Password harus diisi" }).min(8),
+});
+
+
 module.exports = {
   VSRegister,
+  VSLogin,
 };

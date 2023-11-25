@@ -3,13 +3,13 @@ const { PORT } = process.env;
 
 const express = require("express");
 const cors = require("cors");
-const router = require("../routes");
+const router = require("./routes");
 const {
   notFoundHandler,
   internalErrorHandler,
   prismaErrorHandler,
   zodErrorHandler,
-} = require("../middlewares/error");
+} = require("./middlewares/error");
 
 const app = express();
 

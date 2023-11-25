@@ -1,0 +1,16 @@
+steps:
+  - name: "gcr.io/binarskillreals/envsubst"
+    args: ["app.yaml"]
+    env:
+      [
+        "_DATABASE_URL=${_DATABASE_URL}",
+        "_DIRECT_URL=${_DIRECT_URL}",
+        "_JWT_SECRET=${_JWT_SECRET}",
+        "_GOOGLE_REFRESH_TOKEN=${_GOOGLE_REFRESH_TOKEN}",
+        "_GOOGLE_CLIENT_ID=${_GOOGLE_CLIENT_ID}",
+        "_GOOGLE_CLIENT_SECRET=${_GOOGLE_CLIENT_SECRET}",
+        "_GOOGLE_SENDER_EMAIL=${_GOOGLE_SENDER_EMAIL}",
+      ]
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: ["app", "deploy"]
+timeout: "1600s"

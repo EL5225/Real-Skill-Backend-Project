@@ -2,10 +2,113 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String          @id @default(uuid())
+  name         String?
+  email        String          @unique
+  password     String?
+  is_verified  Boolean         @default(false)
+  notification Notifications[]
+  payment      Payments[]
+  class        Classes[]
+  role         Role            @default(USER)
+  profile      Profiles?
+  created_at   DateTime        @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Profiles {
+  id              String   @id @default(uuid())
+  profile_picture String?
+  phone_number    String?
+  updated_at      DateTime @default(now()) @updatedAt
+  user_id         String   @unique
+  user            User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model Notifications {
+  id      String @id @default(uuid())
+  title   String
+  body    String
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model Videos {
+  id          String    @id @default(uuid())
+  title       String
+  link        String
+  time        Int
+  class_id    String
+  class       Classes   @relation(fields: [class_id], references: [id])
+  Chapters    Chapters? @relation(fields: [chapters_id], references: [id])
+  chapters_id String?
+}
+
+model Chapters {
+  id    String   @id @default(uuid())
+  title String
+  video Videos[]
+}
+
+model Classes {
+  id                String       @id @default(uuid())
+  name              String
+  code              String
+  price             String
+  learning_material String
+  categories        Categories[]
+  level             Levels[]
+  video_id          String
+  video             Videos[]
+  admin_id          String
+  admin             User         @relation(fields: [admin_id], references: [id])
+  type              Types?
+  payment           Payments?
+  created_at        DateTime     @default(now())
+}
+
+model Categories {
+  id        String  @id @default(uuid())
+  name      String
+  thumbnail String
+  class_id  String
+  class     Classes @relation(fields: [class_id], references: [id])
+}
+
+model Levels {
+  id       String  @id @default(uuid())
+  name     String
+  class_id String
+  class    Classes @relation(fields: [class_id], references: [id])
+}
+
+model Types {
+  id       String  @id @default(uuid())
+  name     String
+  class_id String  @unique
+  class    Classes @relation(fields: [class_id], references: [id])
+}
+
+model Payments {
+  id       String  @id @default(uuid())
+  is_paid  Boolean @default(false)
+  class_id String  @unique
+  class    Classes @relation(fields: [class_id], references: [id])
+  user_id  String
+  user     User    @relation(fields: [user_id], references: [id])
 }

@@ -1,91 +1,74 @@
 const prisma = require("../libs/prisma");
 const bcrypt = require("bcrypt");
-const { VSRegister } = require("../libs/validation/auth");
-const register = async (req, res, next) => {
+const { VSRegister, VSLogin, VSResetPassword } = require("../libs/validation/auth");
+const nodemailer = require("nodemailer");
+const emailUser = process.env.EMAIL_USER;
+const emailPass = process.env.EMAIL_PASS;
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: emailUser,
+    pass: emailPass,
+  },
+});
+
+const resetPassword = async (req, res, next) => {
   try {
-    const { name, email, password, confirmation_password, phone_number, role } = req.body;
+    const { email, new_password, confirmation_new_password } = req.body;
 
-    VSRegister.parse(req.body);
+    VSResetPassword.parse(req.body);
 
-    if (password !== confirmation_password) {
+    if (new_password !== confirmation_new_password) {
       return res.status(400).json({
         status: false,
         message: "Bad Request",
-        error: "Password dan Konfirmasi Password harus sama",
-        data: null,
+        error: "Password dan Confirmation Password harus sama",
+        data: "null",
       });
     }
 
-    const existingUser = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         email,
       },
     });
 
-    if (existingUser) {
-      return res.status(400).json({
+    if (!user) {
+      return res.status(404).json({
         status: false,
-        message: "Bad Request",
-        error: "Email sudah terdaftar",
+        message: "User not found",
+        error: null,
         data: null,
       });
     }
 
-    const decryptedPassword = await bcrypt.hash(password, 10);
+    const decryptedPassword = await bcrypt.hash(new_password, 10);
 
-    const user = role
-      ? await prisma.user.create({
-          data: {
-            name,
-            email,
-            password: decryptedPassword,
-            role,
-            profile: {
-              create: {
-                phone_number,
-              },
-            },
-          },
+    await prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        password: decryptedPassword,
+      },
+    });
 
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            role: true,
-            created_at: true,
-            profile: true,
-          },
-        })
-      : await prisma.user.create({
-          data: {
-            name,
-            email,
-            password: decryptedPassword,
-            profile: {
-              create: {
-                phone_number,
-              },
-            },
-          },
-
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            role: true,
-            created_at: true,
-            profile: true,
-          },
-        });
+    await transporter.sendMail({
+      from: emailUser,
+      to: email,
+      subject: "Password Reset Successful",
+      text: "Password Anda berhasil diperbaharui",
+    });
 
     res.status(200).json({
       status: true,
-      message: "Registrasi berhasil",
-      data: user,
+      message: "Password reset berhasil",
+      data: null,
     });
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = { register };
+module.exports = { register, login, whoami, resetPassword };

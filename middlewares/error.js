@@ -1,20 +1,6 @@
 const { Prisma } = require("@prisma/client");
 const { ZodError } = require("zod");
 
-const notFoundHandler = (req, res) => {
-  return res.status(404).json({
-    status: false,
-    message: "Not found",
-  });
-};
-
-const internalErrorHandler = (err, req, res) => {
-  return res.status(500).json({
-    status: false,
-    message: err.message,
-  });
-};
-
 const prismaErrorHandler = (err, req, res, next) => {
   const error = err.message.split("\n");
 
@@ -59,6 +45,20 @@ const zodErrorHandler = (err, req, res, next) => {
     });
   }
   return next(err);
+};
+
+const notFoundHandler = (req, res) => {
+  return res.status(404).json({
+    status: false,
+    message: "Not found",
+  });
+};
+
+const internalErrorHandler = (err, req, res) => {
+  return res.status(500).json({
+    status: false,
+    message: err.message,
+  });
 };
 
 module.exports = {

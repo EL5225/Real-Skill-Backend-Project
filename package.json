@@ -2,18 +2,13 @@
   "name": "real-skill",
   "version": "1.0.0",
   "description": "FInal project BEJS 1 - FEJS 2 Binar Academy",
+  "license": "MIT",
   "scripts": {
     "dev": "nodemon app.js",
     "start": "node app.js",
     "migrate": "prisma migrate dev",
-    "db-pull": "prisma db pull",
-    "run gcp-build": ""
+    "db-pull": "prisma db pull"
   },
-  "engines": {
-    "node": ">=16.0.0"
-  },
-  "author": "Google LLC",
-  "license": "Apache-2.0",
   "dependencies": {
     "@prisma/client": "^5.6.0",
     "bcrypt": "^5.1.1",

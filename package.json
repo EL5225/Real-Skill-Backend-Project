@@ -19,7 +19,7 @@
     "googleapis": "^128.0.0",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.7",
-    "swagger-ui-express": "^5.0.0",
+    "swagger-ui-express": "^4.6.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {

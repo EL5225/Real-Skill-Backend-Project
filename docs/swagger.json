@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://binarskillreals.et.r.appspot.com/api"
+      "url": "https://real-skill-backend-project.vercel.app/api"
     },
     {
       "url": "http://localhost:3000/api"

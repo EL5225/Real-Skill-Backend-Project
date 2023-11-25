@@ -12,5 +12,4 @@ auth.post("/register", register);
 auth.post("/login", login);
 auth.get("/whoami", whoami);
 auth.post("/reset-password", resetPassword);
-
 module.exports = auth;

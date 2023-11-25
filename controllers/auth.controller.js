@@ -1,6 +1,6 @@
 const prisma = require("../libs/prisma");
 const bcrypt = require("bcrypt");
-const { VSRegister, VSLogin, VSResetPassword } = require("../libs/validation/auth");
+const { VSResetPassword } = require("../libs/validation/auth");
 const nodemailer = require("nodemailer");
 const emailUser = process.env.EMAIL_USER;
 const emailPass = process.env.EMAIL_PASS;
@@ -28,23 +28,7 @@ const resetPassword = async (req, res, next) => {
       });
     }
 
-    const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
-
-    if (!user) {
-      return res.status(404).json({
-        status: false,
-        message: "User not found",
-        error: null,
-        data: null,
-      });
-    }
-
     const decryptedPassword = await bcrypt.hash(new_password, 10);
-
     await prisma.user.update({
       where: {
         email,
@@ -71,4 +55,4 @@ const resetPassword = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, whoami, resetPassword };
+module.exports = { resetPassword };

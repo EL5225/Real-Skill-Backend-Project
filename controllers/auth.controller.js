@@ -150,7 +150,7 @@ const login = async (req, res, next) => {
   }
 };
 
-const whoami = async (req, res, next) => {
+const authenticated = async (req, res, next) => {
   try {
     const user = req.user;
     if (!user) {
@@ -260,4 +260,4 @@ const resetPassword = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, whoami, resetPassword, forgotPassword };
+module.exports = { register, login, authenticated, resetPassword, forgotPassword };

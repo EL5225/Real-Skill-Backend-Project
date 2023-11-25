@@ -12,6 +12,6 @@ router.get("/", (req, res) => {
 });
 
 router.use("/auth", auth);
-router.use("/user", user);
+router.use("/users", user);
 
 module.exports = router;

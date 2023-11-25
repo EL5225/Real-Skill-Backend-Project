@@ -80,6 +80,125 @@
           }
         }
       }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "login user",
+        "description": "login a new user",
+        "operationId": "post-login-user",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/LoginUser"
+        },
+        "responses": {
+          "200": {
+            "description": "Login Berhasil",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/BasicResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "user": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "example": "Luthfi"
+                                },
+                                "email": {
+                                  "type": "string",
+                                  "example": "l@gmail.com"
+                                },
+                                "role": {
+                                  "type": "string",
+                                  "example": "USER"
+                                },
+                                "createdAt": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "2022-01-01T00:00:00.000Z"
+                                }
+                              }
+                            },
+                            "token": {
+                              "type": "string",
+                              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwibmFtZSI6Ikx1dGF4aSIsImlhdCI6MTY1MjU0NjY5Nn0.2z7i9iJ1s1qT7Nj5wYD9s4jU7Rq5ZbXaM"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/auth/authenticated": {
+      "get": {
+        "tags": ["auth"],
+        "summary": "get authenticated user",
+        "description": "authenticated user",
+        "operationId": "get-authenticated-user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "forgot password user",
+        "description": "forgot password user",
+        "operationId": "post-forgot-password-user",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ForgotPassword"
+        },
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "delete": {
+        "tags": ["users"],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -141,10 +260,10 @@
     },
 
     "securitySchemes": {
-      "token": {
-        "type": "apiKey",
-        "name": "Authorization",
-        "in": "header"
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     },
 
@@ -231,6 +350,26 @@
           }
         },
         "required": true
+      },
+      "ForgotPassword": {
+        "description": "Forgot Password body example",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "l@gmail.com"
+                },
+                "phone_number": {
+                  "type": "string",
+                  "example": "08123456789"
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

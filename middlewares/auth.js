@@ -11,7 +11,17 @@ const authorizationHeader = (req, res, next) => {
     });
   }
 
-  jwt.verify(authorization, JWT_SECRET, async (err, decoded) => {
+  if (authorization.split(" ")[0] !== "Bearer") {
+    return res.status(500).send({
+      auth: false,
+      message: "Error",
+      errors: "invalid token",
+    });
+  }
+
+  const token = authorization.split(" ")[1];
+
+  jwt.verify(token, JWT_SECRET, async (err, decoded) => {
     if (err) {
       return res.status(401).json({
         status: false,

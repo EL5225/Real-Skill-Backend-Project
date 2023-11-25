@@ -7,7 +7,7 @@ const VSRegister = z.object({
   }),
   email: z.string({ required_error: "Email harus diisi" }).email({ message: "Email harus valid" }),
   password: z.string({ required_error: "Password harus diisi" }).min(8),
-  confirmation_password: z.string({ required_error: "Konfirmasi Password harus diisi" }).min(8),
+  confirm_password: z.string({ required_error: "Konfirmasi Password harus diisi" }).min(8),
   phone_number: z
     .string({
       required_error: "Nomor Telepon harus diisi",
@@ -23,8 +23,13 @@ const VSLogin = z.object({
   password: z.string({ required_error: "Password harus diisi" }).min(8),
 });
 
+const VSResetPassword = z.object({
+  new_password: z.string({ required_error: "Password harus diisi" }).min(8),
+  confirm_new_password: z.string({ required_error: "Konfirmasi Password harus diisi" }).min(8),
+});
 
 module.exports = {
   VSRegister,
   VSLogin,
+  VSResetPassword,
 };

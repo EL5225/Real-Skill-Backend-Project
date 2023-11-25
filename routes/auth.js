@@ -4,12 +4,15 @@ const {
   login,
   whoami,
   resetPassword,
-} = require("../controllers/auth.controllers");
+  forgotPassword,
+} = require("../controllers/auth.controller");
+const { authorizationHeader, authorizationQuery } = require("../middlewares/auth");
 
 const auth = Router();
 
 auth.post("/register", register);
 auth.post("/login", login);
-auth.get("/whoami", whoami);
-auth.post("/reset-password", resetPassword);
+auth.get("/whoami", authorizationHeader, whoami);
+auth.post("/forgot-password", forgotPassword);
+auth.post("/reset-password", authorizationQuery, resetPassword);
 module.exports = auth;

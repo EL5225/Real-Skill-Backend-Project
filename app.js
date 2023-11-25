@@ -24,8 +24,7 @@ app.set("trust proxy", true);
 
 // Routes
 app.use("/api", router);
-
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs), { customCssUrl: CSS_URL });
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs, { customCssUrl: CSS_URL }));
 
 // Middlewares errors
 app.use(zodErrorHandler);

@@ -19,3 +19,23 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+
+      - name: Run Prisma Migrate
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.PRISMA_DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.PRISMA_DIRECT_URL }}
+
+      - name: Run Prisma Generate
+        run: npx prisma generate
+
+      - name: Deploy to App Engine
+        id: deploy
+        uses: google-github-actions/deploy-appengine@v0.2.0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: test
+        id: test
+        run: curl ${{ steps.deploy.outputs.url }}

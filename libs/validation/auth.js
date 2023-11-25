@@ -5,6 +5,7 @@ const VSRegister = z.object({
     required_error: "Name harus diisi",
     invalid_type_error: "Name harus berupa string",
   }),
+<<<<<<< HEAD
   email: z
     .string({ required_error: "Email harus diisi" })
     .email({ message: "Email harus valid" }),
@@ -12,6 +13,11 @@ const VSRegister = z.object({
   confirmation_password: z
     .string({ required_error: "Konfirmasi Password harus diisi" })
     .min(8),
+=======
+  email: z.string({ required_error: "Email harus diisi" }).email({ message: "Email harus valid" }),
+  password: z.string({ required_error: "Password harus diisi" }).min(8),
+  confirmation_password: z.string({ required_error: "Konfirmasi Password harus diisi" }).min(8),
+>>>>>>> c17502119cbef038fefe8d19bec6eb226742468d
   phone_number: z
     .string({
       required_error: "Nomor Telepon harus diisi",

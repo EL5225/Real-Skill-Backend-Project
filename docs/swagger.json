@@ -1,0 +1,237 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "RealSkill API",
+    "description": "Final project backend BEJS 1 - FEJS 2 Binar Academy | RealSkill",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://binarskillreals.et.r.appspot.com/api"
+    },
+    {
+      "url": "http://localhost:3000/api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Operations about authentication"
+    },
+    {
+      "name": "users",
+      "description": "Operations about user"
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "create new user",
+        "description": "register a new user",
+        "operationId": "post-register-user",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateUser"
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/BasicResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "example": "Luthfi"
+                            },
+                            "email": {
+                              "type": "string",
+                              "example": "l@gmail.com"
+                            },
+                            "role": {
+                              "type": "string",
+                              "example": "USER"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2022-01-01T00:00:00.000Z"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BasicResponse": {
+        "title": "BasicResponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "OK!"
+          }
+        }
+      },
+      "UserModel": {
+        "title": "UserModel",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Luthfi"
+          },
+          "email": {
+            "type": "string",
+            "example": "l@gmail.com"
+          }
+        }
+      },
+      "Pagination": {
+        "title": "Pagination",
+        "type": "object",
+        "properties": {
+          "links": {
+            "type": "object",
+            "properties": {
+              "next": {
+                "type": "string",
+                "example": ""
+              },
+              "prev": {
+                "type": "string",
+                "example": ""
+              }
+            }
+          },
+          "totalItems": {
+            "type": "number"
+          }
+        }
+      }
+    },
+
+    "securitySchemes": {
+      "token": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+
+    "requestBodies": {
+      "CreateTransaction": {
+        "description": "Create Transaction body example",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sourceAccountNumber": {
+                  "type": "string",
+                  "example": "15ce16e7-44ee-476d-b8d0-def01da064d1"
+                },
+                "destinationAccountNumber": {
+                  "type": "string",
+                  "example": "00kg6e7-64fe-mk06-p034-iaj85damk0d1"
+                },
+                "amount": {
+                  "type": "number",
+                  "example": 100000
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "CreateUser": {
+        "description": "Create User body example",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Luthfi"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "l@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "luthfi123"
+                },
+                "confirm_password": {
+                  "type": "string",
+                  "example": "luthfi123"
+                },
+                "phone_number": {
+                  "type": "string",
+                  "example": "08123456789"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "USER"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "LoginUser": {
+        "description": "Login body example",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "l@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "test12345"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  }
+}

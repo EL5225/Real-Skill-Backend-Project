@@ -8,19 +8,14 @@
     "start": "node app.js",
     "migrate": "prisma migrate dev",
     "db-pull": "prisma db pull",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "lint": "eslint .",
+    "pretty": "prettier --write ."
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "yarn lint, yarn pretty"
     }
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint — fix",
-      "prettier — write",
-      "git add"
-    ]
   },
   "dependencies": {
     "@prisma/client": "^5.6.0",

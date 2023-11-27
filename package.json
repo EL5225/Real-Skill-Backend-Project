@@ -10,11 +10,12 @@
     "db-pull": "prisma db pull",
     "postinstall": "prisma generate",
     "lint": "eslint .",
+    "lint-fix": "eslint . --fix",
     "pretty": "prettier --write ."
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "yarn lint && yarn pretty"
     }
   },
   "dependencies": {

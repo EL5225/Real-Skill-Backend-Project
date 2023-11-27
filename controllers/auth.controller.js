@@ -11,8 +11,9 @@ const register = async (req, res, next) => {
 
     VSRegister.parse(req.body);
 
-    const name = name;
-    const email = email;
+    const name1 = name;
+    const email1 = email;
+    const password1 = password;
 
     if (password !== confirm_password) {
       return res.status(400).json({

@@ -51,7 +51,7 @@
                           "properties": {
                             "name": {
                               "type": "string",
-                              "example": "Luthfi"
+                              "example": "realskills"
                             },
                             "email": {
                               "type": "string",
@@ -111,7 +111,7 @@
                               "properties": {
                                 "name": {
                                   "type": "string",
-                                  "example": "Luthfi"
+                                  "example": "Realskills"
                                 },
                                 "email": {
                                   "type": "string",
@@ -187,6 +187,34 @@
         }
       }
     },
+    "/auth/reset-password": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "reset password user",
+        "description": "reset password user",
+        "operationId": "post-reset-password-user",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "token"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ResetPassword"
+        },
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/users/{id}": {
       "delete": {
         "tags": ["users"],
@@ -227,7 +255,7 @@
           },
           "name": {
             "type": "string",
-            "example": "Luthfi"
+            "example": "realskills"
           },
           "email": {
             "type": "string",
@@ -302,19 +330,19 @@
               "properties": {
                 "name": {
                   "type": "string",
-                  "example": "Luthfi"
+                  "example": "Realskills"
                 },
                 "email": {
                   "type": "string",
-                  "example": "l@gmail.com"
+                  "example": "realskill@gmail.com"
                 },
                 "password": {
                   "type": "string",
-                  "example": "luthfi123"
+                  "example": "Realskills123"
                 },
                 "confirm_password": {
                   "type": "string",
-                  "example": "luthfi123"
+                  "example": "Realskills123"
                 },
                 "phone_number": {
                   "type": "string",
@@ -343,7 +371,7 @@
                 },
                 "password": {
                   "type": "string",
-                  "example": "test12345"
+                  "example": "Realskills123"
                 }
               }
             }
@@ -352,7 +380,7 @@
         "required": true
       },
       "ForgotPassword": {
-        "description": "Forgot Password body example",
+        "description": "Kirimkan salah satu antara email atau phone_number. Jangan dua-duanya",
         "content": {
           "application/json": {
             "schema": {
@@ -365,6 +393,26 @@
                 "phone_number": {
                   "type": "string",
                   "example": "08123456789"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ResetPassword": {
+        "description": "Reset password body example",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "new_password": {
+                  "type": "string",
+                  "example": "Realskills123"
+                },
+                "confirm_new_password": {
+                  "type": "string",
+                  "example": "Realskills123"
                 }
               }
             }

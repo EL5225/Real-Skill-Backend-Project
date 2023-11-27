@@ -12,6 +12,7 @@ const register = async (req, res, next) => {
     VSRegister.parse(req.body);
 
     const name = name;
+    const email = email;
 
     if (password !== confirm_password) {
       return res.status(400).json({

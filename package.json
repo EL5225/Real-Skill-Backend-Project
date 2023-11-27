@@ -11,12 +11,19 @@
     "postinstall": "prisma generate",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
-    "pretty": "prettier --write ."
+    "pretty": "prettier --write .",
+    "prepare": "husky install"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint"
+      "pre-commit": "yarn lint-staged"
     }
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "yarn prettier --write",
+      "yarn eslint --fix"
+    ]
   },
   "dependencies": {
     "@prisma/client": "^5.6.0",
@@ -33,7 +40,8 @@
   "devDependencies": {
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
-    "husky": "^8.0.3",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.1.0",
     "nodemon": "^3.0.1",
     "prettier": "3.1.0",
     "prisma": "^5.6.0"

@@ -5,7 +5,7 @@ on:
     types: [opened]
 
 jobs:
-  deploy:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,5 +22,19 @@ jobs:
       - name: lint
         run: yarn lint
 
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install NodeJS 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install Dependencies
+        run: yarn install
+
       - name: format
-        run: yarn pretty.
+        run: yarn pretty

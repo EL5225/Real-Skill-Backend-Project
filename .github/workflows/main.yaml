@@ -1,5 +1,4 @@
-name: Deploy DEVELOP Environment
-
+name: Testing
 on:
   pull_request:
     types: [opened]

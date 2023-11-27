@@ -20,10 +20,12 @@ module.exports = {
     ecmaVersion: "latest",
   },
   rules: {
-    "no-unused-vars": "warn",
+    "no-unused-vars": "error",
     "no-undef": "off",
     "no-console": "off",
-    "no-debugger": "off",
-    "no-unused-expressions": "warn",
+    "no-debugger": "error",
+    "no-unused-expressions": "error",
+    "no-unused-labels": "error",
+    "no-use-before-define": "error",
   },
 };

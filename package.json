@@ -10,6 +10,18 @@
     "db-pull": "prisma db pull",
     "postinstall": "prisma generate"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint — fix",
+      "prettier — write",
+      "git add"
+    ]
+  },
   "dependencies": {
     "@prisma/client": "^5.6.0",
     "bcrypt": "^5.1.1",
@@ -25,6 +37,7 @@
   "devDependencies": {
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
+    "husky": "^8.0.3",
     "nodemon": "^3.0.1",
     "prettier": "3.1.0",
     "prisma": "^5.6.0"

@@ -9,7 +9,7 @@ const register = async (req, res, next) => {
   try {
     const { name, email, password, confirm_password, phone_number, role } = req.body;
 
-    VSRegister.parse(req.body);
+    VSRegister.parse(req.bod);
 
     if (password !== confirm_password) {
       return res.status(400).json({
@@ -199,8 +199,6 @@ const forgotPassword = async (req, res, next) => {
         data: null,
       });
     }
-
-    console.log(user);
 
     const token = jwt.sign(
       {

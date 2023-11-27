@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { VSResetPassword, VSRegister, VSLogin } = require("../libs/validation/auth");
 const { sendEmail } = require("../utils/nodemailer");
+const { emailTemplate } = require("../utils/helpers/email");
 const { JWT_SECRET } = process.env;
 
 const register = async (req, res, next) => {
@@ -210,13 +211,18 @@ const forgotPassword = async (req, res, next) => {
       },
     );
 
-    const path = `${req.protocol}://${req.get("host")}/api/auth/reset-password?token=${token}`;
+    const path = `https://real-skills.vercel.app/resetPassword?token=${token}`;
 
-    sendEmail(email ? email : user.user.email, "Link untuk reset password", path);
+    const template = emailTemplate(path);
+
+    sendEmail(email ? email : user.user.email, "Link untuk reset password", template);
 
     res.status(200).json({
       status: true,
       message: "Link untuk reset password telah dikirim ke email kamu!",
+      data: {
+        token,
+      },
     });
   } catch (error) {
     next(error);

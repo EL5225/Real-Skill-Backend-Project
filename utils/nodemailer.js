@@ -13,7 +13,7 @@ oauth2Client.setCredentials({
   refresh_token: GOOGLE_REFRESH_TOKEN,
 });
 
-const sendEmail = async (to, subject, text) => {
+const sendEmail = async (to, subject, html) => {
   try {
     const accessToken = await oauth2Client.getAccessToken();
 
@@ -28,24 +28,10 @@ const sendEmail = async (to, subject, text) => {
         accessToken: accessToken,
       },
     });
-    transport.sendMail({ to, subject, text });
+    transport.sendMail({ to, subject, html });
   } catch (error) {
     console.log(error);
   }
 };
-
-// const getHTML = (filename, data) => {
-//   return new Promise((resolve, reject) => {
-//     const currentPath = path.resolve(__dirname, `../views/${filename}`);
-
-//     ejs.renderFile(currentPath, data, (err, html) => {
-//       if (err) {
-//         return reject(err);
-//       }
-
-//       return resolve(html);
-//     });
-//   });
-// };
 
 module.exports = { sendEmail };

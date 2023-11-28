@@ -211,7 +211,7 @@ const forgotPassword = async (req, res, next) => {
       },
     );
 
-    const path = `https://real-skills.vercel.app/resetPassword?token=${token}`;
+    const path = `https://real-skills.vercel.app/resetPassword`;
 
     const template = emailTemplate(path);
 

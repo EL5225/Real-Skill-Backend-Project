@@ -6,9 +6,7 @@
     "version": "1.0.0"
   },
   "servers": [
-    {
-      "url": "https://real-skill-backend-project.vercel.app/api"
-    },
+    { "url": "https://real-skills-dev-fgnc.2.sg-1.fl0.io/api" },
     {
       "url": "http://localhost:3000/api"
     }

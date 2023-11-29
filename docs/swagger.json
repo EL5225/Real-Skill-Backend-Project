@@ -19,6 +19,14 @@
     {
       "name": "users",
       "description": "Operations about user"
+    },
+    {
+      "name": "profiles",
+      "description": "Operations about profiles"
+    },
+    {
+      "name": "general",
+      "description": "Operations about general or public or common endpoint"
     }
   ],
   "paths": {
@@ -197,7 +205,8 @@
               "type": "string"
             },
             "in": "query",
-            "name": "token"
+            "name": "token",
+            "required": true
           }
         ],
         "requestBody": {
@@ -213,9 +222,147 @@
         }
       }
     },
+    "/users": {
+      "get": {
+        "tags": ["users"],
+        "summary": "get all user",
+        "description": "Mendapatkan semua data user | pagination",
+        "operationId": "get-users",
+        "parameters": [
+          {
+            "name": "page",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          },
+          {
+            "name": "limit",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/users/{id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "get user by id",
+        "description": "Mendapatkan data user dengan id",
+        "operationId": "get-user-by-id",
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
       "delete": {
         "tags": ["users"],
+        "summary": "delete user by id",
+        "description": "Menghapus data user dengan id",
+        "operationId": "delete-user-by-id",
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/profiles": {
+      "put": {
+        "tags": ["profiles"],
+        "summary": "update data profile",
+        "description": "Update data profile",
+        "operationId": "put-profile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/general/categories": {
+      "get": {
+        "tags": ["general"],
+        "summary": "get categories class",
+        "description": "get data categories",
+        "operationId": "get-categories",
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/general/levels": {
+      "get": {
+        "tags": ["general"],
+        "summary": "get levels class",
+        "description": "get data levels",
+        "operationId": "get-levels",
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/general/types": {
+      "get": {
+        "tags": ["general"],
+        "summary": "get types class",
+        "description": "get data types",
+        "operationId": "get-types",
         "responses": {
           "200": {
             "description": "OK!"

@@ -8,7 +8,7 @@ const { JWT_SECRET } = process.env;
 
 const register = async (req, res, next) => {
   try {
-    const { name, email, password, confirm_password, phone_number, role } = req.body;
+    const { name, email, password, confirm_password, phone_number } = req.body;
 
     VSRegister.parse(req.body);
 
@@ -17,7 +17,6 @@ const register = async (req, res, next) => {
         status: false,
         message: "Bad Request",
         error: "Password dan Konfirmasi Password harus sama",
-        data: null,
       });
     }
 
@@ -31,62 +30,57 @@ const register = async (req, res, next) => {
       return res.status(400).json({
         status: false,
         message: "Bad Request",
-        error: "Email sudah terdaftar",
-        data: null,
+        error: "Email atau password tidak valid",
       });
     }
 
     const decryptedPassword = await bcrypt.hash(password, 10);
 
-    const user = role
-      ? await prisma.user.create({
-          data: {
-            name,
-            email,
-            password: decryptedPassword,
-            role,
-            profile: {
-              create: {
-                phone_number,
-              },
-            },
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: decryptedPassword,
+        profile: {
+          create: {
+            phone_number,
           },
+        },
+      },
 
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            role: true,
-            created_at: true,
-            profile: true,
-          },
-        })
-      : await prisma.user.create({
-          data: {
-            name,
-            email,
-            password: decryptedPassword,
-            profile: {
-              create: {
-                phone_number,
-              },
-            },
-          },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        created_at: true,
+        profile: true,
+      },
+    });
 
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            role: true,
-            created_at: true,
-            profile: true,
-          },
-        });
+    const token = jwt.sign(
+      {
+        id: user.id,
+      },
+      JWT_SECRET,
+      {
+        expiresIn: "3m",
+      },
+    );
+
+    const path = `${req.protocol}://${req.get("host")}/api/auth/verify?token=${token}`;
+
+    const template = emailTemplate(
+      path,
+      "Verifikasi Akun",
+      "Klik tombol di bawah untuk mengaktifkan akun kamu!",
+    );
+
+    sendEmail(email, "Verifikasi Akun", template);
 
     res.status(200).json({
       status: true,
-      message: "Registrasi berhasil",
-      data: user,
+      message: "Registrasi berhasil, silakan cek email untuk verifikasi akun!",
     });
   } catch (error) {
     next(error);
@@ -109,8 +103,15 @@ const login = async (req, res, next) => {
       return res.status(400).json({
         status: false,
         message: "Bad Request",
-        error: "Email atau password salah",
-        data: null,
+        error: "Email atau password tidak valid",
+      });
+    }
+
+    if (!user.is_verified) {
+      return res.status(400).json({
+        status: false,
+        message: "Bad Request",
+        error: "Email atau password tidak valid",
       });
     }
 
@@ -120,8 +121,7 @@ const login = async (req, res, next) => {
       return res.status(400).json({
         status: false,
         message: "Bad Request",
-        error: "email dan password salah",
-        data: null,
+        error: "Email atau password tidak valid",
       });
     }
 
@@ -157,15 +157,14 @@ const authenticated = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({
         status: false,
-        message: "User not found",
-        error: null,
-        data: null,
+        message: "Bad Request",
+        error: "User Tidak ditemukan",
       });
     }
 
     res.status(200).json({
       status: true,
-      message: "User found",
+      message: "User terverifikasi",
       data: user,
     });
   } catch (error) {
@@ -197,7 +196,6 @@ const forgotPassword = async (req, res, next) => {
         status: false,
         message: "Bad Request",
         error: "User Tidak ditemukan",
-        data: null,
       });
     }
 
@@ -211,9 +209,13 @@ const forgotPassword = async (req, res, next) => {
       },
     );
 
-    const path = `https://real-skills.vercel.app/resetPassword`;
+    const path = `https://real-skills.vercel.app/resetPassword?token=${token}`;
 
-    const template = emailTemplate(path);
+    const template = emailTemplate(
+      path,
+      "Reset Password",
+      "Klik tombol di bawah untuk reset password",
+    );
 
     sendEmail(email ? email : user.user.email, "Link untuk reset password", template);
 
@@ -241,7 +243,6 @@ const resetPassword = async (req, res, next) => {
         status: false,
         message: "Bad Request",
         error: "Password dan Confirmation Password harus sama",
-        data: null,
       });
     }
 
@@ -264,4 +265,31 @@ const resetPassword = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, authenticated, resetPassword, forgotPassword };
+const verifyUser = async (req, res, next) => {
+  try {
+    const user = req.user;
+
+    if (user.is_verified) {
+      alert("Tidak bisa verifikasi email yang sudah diverifikasi!");
+
+      return res.redirect("https://real-skills.vercel.app/login");
+    }
+
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        is_verified: true,
+      },
+    });
+
+    alert("Email Telah Diverifikasi!");
+
+    res.redirect("https://real-skills.vercel.app/login");
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { register, login, authenticated, resetPassword, forgotPassword, verifyUser };

@@ -1,4 +1,4 @@
-const emailTemplate = (url) => {
+const emailTemplate = (url, name, description) => {
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html
       xmlns="http://www.w3.org/1999/xhtml"
@@ -374,7 +374,7 @@ const emailTemplate = (url) => {
                                           ><span
                                             ><span
                                               ><span
-                                                ><span><span>Reset Password</span></span></span
+                                                ><span><span>${name}</span></span></span
                                               ></span
                                             ></span
                                           ></span
@@ -416,7 +416,7 @@ const emailTemplate = (url) => {
                                       "
                                     >
                                       <p style="line-height: 140%">
-                                        Klik link di bawah ini untuk mengubah password mu
+                                        ${description}
                                       </p>
                                     </div>
                                   </td>

@@ -20,7 +20,7 @@ model User {
   is_verified   Boolean         @default(false)
   notifications Notifications[]
   payments      Payments[]
-  classs        Classes[]
+  class         Classes[]
   role          Role            @default(USER)
   profile       Profiles?
   created_at    DateTime        @default(now())

@@ -1,8 +1,6 @@
 require("dotenv").config();
 const { google } = require("googleapis");
 const nodemailer = require("nodemailer");
-// const path = require("path");
-// const ejs = require("ejs");
 
 const { GOOGLE_REFRESH_TOKEN, GOOGLE_SENDER_EMAIL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } =
   process.env;

@@ -15,7 +15,6 @@ const VSRegister = z.object({
     })
     .min(10, { message: "Nomor Telepon harus minimal 10 digit" })
     .max(13, { message: "Nomor Telepon harus maximal 13 digit" }),
-  role: z.string().optional(),
 });
 
 const VSLogin = z.object({

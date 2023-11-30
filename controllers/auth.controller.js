@@ -26,6 +26,8 @@ const register = async (req, res, next) => {
       },
     });
 
+    console.log(existingUser);
+
     if (existingUser) {
       return res.status(400).json({
         status: false,
@@ -267,9 +269,7 @@ const verifyUser = async (req, res, next) => {
     const user = req.user;
 
     if (user.is_verified) {
-      alert("Tidak bisa verifikasi email yang sudah diverifikasi!");
-
-      return res.redirect("https://real-skills.vercel.app/login");
+      return res.send("Email sudah terverifikasi, silahkan login");
     }
 
     await prisma.user.update({
@@ -280,8 +280,6 @@ const verifyUser = async (req, res, next) => {
         is_verified: true,
       },
     });
-
-    alert("Email Telah Diverifikasi!");
 
     res.redirect("https://real-skills.vercel.app/login");
   } catch (error) {

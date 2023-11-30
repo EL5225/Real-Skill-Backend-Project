@@ -26,7 +26,7 @@ const sendEmail = async (to, subject, html) => {
         accessToken: accessToken,
       },
     });
-    await transport.sendMail({ to, subject, html });
+    transport.sendMail({ to, subject, html });
   } catch (error) {
     console.log(error);
   }

@@ -68,6 +68,7 @@ const authorizationQuery = (req, res, next) => {
         id: true,
         name: true,
         email: true,
+        is_verified: true,
         profile: true,
       },
     });

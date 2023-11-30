@@ -1,14 +1,15 @@
 const prisma = require("../libs/prisma");
 const { VSUpdateProfile } = require("../libs/validation/profile");
+const cloudinary = require("../libs/cloudinary");
 
 const updateProfile = async (req, res, next) => {
   try {
     const user = req.user;
-    const { profile_picture, name, phone_number } = req.body;
+    const { name, phone_number } = req.body;
 
     VSUpdateProfile.parse(req.body);
 
-    const updatedUser = await prisma.user.update({
+    await prisma.user.update({
       where: {
         id: user.id,
       },
@@ -17,22 +18,29 @@ const updateProfile = async (req, res, next) => {
       },
     });
 
-    const updatedProfile = await prisma.profiles.update({
-      where: {
-        user_id: user.id,
-      },
-      data: {
-        profile_picture,
-        phone_number,
-      },
-    });
+    const timestamp = Date.now();
+    const public_id = `profile_${timestamp}_realskills`;
 
-    if (!updatedUser || !updatedProfile) {
-      return res.status(404).json({
-        status: false,
-        message: "User tidak ditemukan",
-      });
-    }
+    cloudinary.uploader
+      .upload_stream({ resource_type: "image", public_id }, async (err, result) => {
+        if (err) {
+          return res.status(500).json({
+            status: false,
+            message: "Internal Server Error",
+            error: err.message,
+          });
+        }
+        await prisma.profiles.update({
+          where: {
+            user_id: user.id,
+          },
+          data: {
+            profile_picture: result.secure_url,
+            phone_number,
+          },
+        });
+      })
+      .end(req.file.buffer);
 
     return res.status(200).json({
       status: true,

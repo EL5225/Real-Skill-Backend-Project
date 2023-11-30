@@ -51,9 +51,7 @@ const getAllTypes = async (req, res, next) => {
     if (!types || types.length === 0) {
       return res.status(404).json({
         status: false,
-        message: "Type not found",
-        error: null,
-        data: null,
+        message: "Types tidak ditemukan",
       });
     }
 

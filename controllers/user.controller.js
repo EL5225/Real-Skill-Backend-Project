@@ -39,6 +39,14 @@ const getAllUsers = async (req, res, next) => {
         email: true,
         role: true,
         is_verified: true,
+        profile: {
+          select: {
+            id: true,
+            profile_picture: true,
+            phone_number: true,
+            updated_at: true,
+          },
+        },
         created_at: true,
       },
     });

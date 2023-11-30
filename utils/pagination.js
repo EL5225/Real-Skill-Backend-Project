@@ -1,6 +1,6 @@
 const getPagination = (req, count, page, limit) => {
-  let result = {};
-  let link = {};
+  const result = {};
+  const link = {};
   const path = `${req.protocol}://${req.get("host")}` + req.baseUrl;
 
   if (count - limit * page <= 0) {

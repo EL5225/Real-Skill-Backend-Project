@@ -63,9 +63,6 @@ const register = async (req, res, next) => {
         id: user.id,
       },
       JWT_SECRET,
-      {
-        expiresIn: "3m",
-      },
     );
 
     const path = `${req.protocol}://${req.get("host")}/api/auth/verify?token=${token}`;

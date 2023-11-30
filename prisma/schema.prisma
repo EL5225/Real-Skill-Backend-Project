@@ -85,7 +85,7 @@ model Classes {
   level_id          Int
   type              Types      @relation(fields: [type_id], references: [id], onUpdate: NoAction)
   type_id           Int
-  payment           Payments?
+  payment           Payments[]
   created_at        DateTime   @default(now())
 }
 
@@ -112,7 +112,7 @@ model Payments {
   is_paid        Boolean  @default(false)
   payment_method String
   payment_date   DateTime @updatedAt
-  class_id       String   @unique
+  class_id       String
   class          Classes  @relation(fields: [class_id], references: [id], onUpdate: NoAction)
   user_id        String
   user           User     @relation(fields: [user_id], references: [id], onUpdate: NoAction)

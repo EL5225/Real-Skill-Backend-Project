@@ -315,6 +315,9 @@
             "bearerAuth": []
           }
         ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateProfile"
+        },
         "responses": {
           "200": {
             "description": "OK!"
@@ -492,10 +495,6 @@
                 "phone_number": {
                   "type": "string",
                   "example": "08123456789"
-                },
-                "role": {
-                  "type": "string",
-                  "example": "USER"
                 }
               }
             }
@@ -558,6 +557,30 @@
                 "confirm_new_password": {
                   "type": "string",
                   "example": "Realskills123"
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateProfile": {
+        "description": "Update profile body example, semuanya opsional",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Realskills"
+                },
+                "phone_number": {
+                  "type": "string",
+                  "example": "08123456789"
+                },
+                "profile_picture": {
+                  "type": "string",
+                  "example": "https://example.jpg"
                 }
               }
             }

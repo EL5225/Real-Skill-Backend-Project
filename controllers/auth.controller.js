@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { VSResetPassword, VSRegister, VSLogin } = require("../libs/validation/auth");
 const { sendEmail } = require("../utils/nodemailer");
-const { emailTemplate } = require("../utils/helpers/email");
+const { emailTemplate } = require("../utils/email");
 const { JWT_SECRET } = process.env;
 
 const register = async (req, res, next) => {

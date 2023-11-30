@@ -566,7 +566,7 @@
       "UpdateProfile": {
         "description": "Update profile body example, semuanya opsional",
         "content": {
-          "application/json": {
+          "multipart/form-data": {
             "schema": {
               "type": "object",
               "properties": {
@@ -580,7 +580,7 @@
                 },
                 "profile_picture": {
                   "type": "string",
-                  "example": "https://example.jpg"
+                  "format": "binary"
                 }
               }
             }

@@ -7,8 +7,8 @@ const getAllCategory = async (req, res, next) => {
     if (!categories || categories.length === 0) {
       return res.status(404).json({
         status: false,
-        message: "Category not found",
-        error: null,
+        message: "Bad Request",
+        error: "Category tidak ditemukan",
       });
     }
 
@@ -29,8 +29,8 @@ const getAllLevel = async (req, res, next) => {
     if (!levels || levels.length === 0) {
       return res.status(404).json({
         status: false,
-        message: "Level not found",
-        error: null,
+        message: "Bad Request",
+        error: "Level tidak ditemukan",
       });
     }
 
@@ -46,11 +46,7 @@ const getAllLevel = async (req, res, next) => {
 
 const getAllTypes = async (req, res, next) => {
   try {
-    const types = await prisma.types.findMany({
-      include: {
-        classes: true,
-      },
-    });
+    const types = await prisma.types.findMany();
 
     if (!types || types.length === 0) {
       return res.status(404).json({

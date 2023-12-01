@@ -26,8 +26,6 @@ const register = async (req, res, next) => {
       },
     });
 
-    console.log(existingUser);
-
     if (existingUser) {
       return res.status(400).json({
         status: false,
@@ -88,21 +86,27 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, admin_id } = req.body;
 
     VSLogin.parse(req.body);
 
-    const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
+    const user = email
+      ? await prisma.user.findUnique({
+          where: {
+            email,
+          },
+        })
+      : await prisma.user.findUnique({
+          where: {
+            admin_id: admin_id,
+          },
+        });
 
     if (!user) {
       return res.status(400).json({
         status: false,
         message: "Bad Request",
-        error: "Email atau password tidak valid",
+        error: `${admin_id ? "ID" : "Email"} atau password tidak valid`,
       });
     }
 
@@ -120,7 +124,7 @@ const login = async (req, res, next) => {
       return res.status(400).json({
         status: false,
         message: "Bad Request",
-        error: "Email atau password tidak valid",
+        error: `${admin_id ? "ID" : "Email"} atau password tidak valid`,
       });
     }
 

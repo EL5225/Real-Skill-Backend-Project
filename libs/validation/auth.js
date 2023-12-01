@@ -18,8 +18,9 @@ const VSRegister = z.object({
 });
 
 const VSLogin = z.object({
-  email: z.string({ required_error: "Email harus diisi" }).email({ message: "Email harus valid" }),
+  email: z.string().email({ message: "Email harus valid" }).optional(),
   password: z.string({ required_error: "Password harus diisi" }).min(8),
+  admin_id: z.string().optional(),
 });
 
 const VSResetPassword = z.object({

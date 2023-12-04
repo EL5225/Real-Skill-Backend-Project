@@ -92,6 +92,7 @@ model Classes {
 model Categories {
   id      Int       @id
   name    String    @unique
+  image   String?
   classes Classes[]
 }
 

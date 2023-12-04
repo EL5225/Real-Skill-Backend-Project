@@ -105,7 +105,7 @@ const getClassById = async (req, res, next) => {
       return res.status(404).json({
         status: false,
         message: "Bad Request",
-        error: "Class tidak ditemukan",
+        error: "Id class tidak ditemukan",
       });
     }
     res.status(200).json({

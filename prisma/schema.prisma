@@ -22,7 +22,6 @@ model User {
   payments      Payments[]
   class         Classes[]
   role          Role            @default(USER)
-  admin_id      String?         @unique
   profile       Profiles?
   created_at    DateTime        @default(now())
 }
@@ -56,7 +55,7 @@ model Videos {
   title      String
   link       String
   time       Int
-  chapter    Chapters? @relation(fields: [chapter_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  chapter    Chapters? @relation(fields: [chapter_id], references: [id], onUpdate: NoAction)
   chapter_id String?
   created_at DateTime  @default(now())
 }
@@ -65,31 +64,29 @@ model Chapters {
   id         String   @id @default(uuid())
   title      String
   videos     Videos[]
-  is_watched Boolean  @default(false)
-  class      Classes? @relation(fields: [class_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  class      Classes? @relation(fields: [class_id], references: [id])
   class_id   String?
   created_at DateTime @default(now())
 }
 
 model Classes {
-  id          String     @id @default(uuid())
-  name        String
-  code        String     @unique
-  price       String
-  about       String
-  modules     Int
-  category    Categories @relation(fields: [category_id], references: [id], onUpdate: NoAction)
-  category_id Int
-  chapters    Chapters[]
-  video_id    String
-  user        User       @relation(fields: [user_id], references: [id], onUpdate: NoAction)
-  user_id     String
-  level       Levels?    @relation(fields: [level_id], references: [id], onUpdate: NoAction)
-  level_id    Int
-  type        Types      @relation(fields: [type_id], references: [id], onUpdate: NoAction)
-  type_id     Int
-  payment     Payments[]
-  created_at  DateTime   @default(now())
+  id                String     @id @default(uuid())
+  name              String
+  code              String     @unique
+  price             String
+  learning_material String
+  category          Categories @relation(fields: [category_id], references: [id], onUpdate: NoAction)
+  category_id       Int
+  chapters          Chapters[]
+  video_id          String
+  admin             User       @relation(fields: [admin_id], references: [id], onUpdate: NoAction)
+  admin_id          String
+  level             Levels?    @relation(fields: [level_id], references: [id], onUpdate: NoAction)
+  level_id          Int
+  type              Types      @relation(fields: [type_id], references: [id], onUpdate: NoAction)
+  type_id           Int
+  payment           Payments[]
+  created_at        DateTime   @default(now())
 }
 
 model Categories {
@@ -116,8 +113,8 @@ model Payments {
   payment_method String
   payment_date   DateTime @updatedAt
   class_id       String
-  class          Classes  @relation(fields: [class_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  class          Classes  @relation(fields: [class_id], references: [id], onUpdate: NoAction)
   user_id        String
-  user           User     @relation(fields: [user_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  user           User     @relation(fields: [user_id], references: [id], onUpdate: NoAction)
   created_at     DateTime @default(now())
 }

@@ -3,6 +3,7 @@ const auth = require("./auth");
 const user = require("./user");
 const profile = require("./profile");
 const general = require("./general");
+const course = require("./class");
 
 const router = Router();
 
@@ -17,5 +18,6 @@ router.use("/auth", auth);
 router.use("/users", user);
 router.use("/profiles", profile);
 router.use("/general", general);
+router.use("/class", course);
 
 module.exports = router;

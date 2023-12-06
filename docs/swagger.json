@@ -25,6 +25,10 @@
       "description": "Operations about profiles"
     },
     {
+      "name": "classes",
+      "description": "Operations about classes"
+    },
+    {
       "name": "general",
       "description": "Operations about general or public or common endpoint"
     }
@@ -328,6 +332,181 @@
         }
       }
     },
+    "/classes": {
+      "post": {
+        "tags": ["classes"],
+        "summary": "create data class",
+        "description": "create data class",
+        "operationId": "create-class",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateClass"
+        },
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "get": {
+        "tags": ["classes"],
+        "summary": "get all class",
+        "description": "Mendapatkan semua data class | pagination",
+        "operationId": "get-classes",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          },
+          {
+            "name": "limit",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/classes/{id}": {
+      "get": {
+        "tags": ["classes"],
+        "summary": "get class by id",
+        "description": "Mendapatkan data class dengan id",
+        "operationId": "get-class-by-id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "put": {
+        "tags": ["classes"],
+        "summary": "update data class by id",
+        "description": "Update data class dengan id",
+        "operationId": "put-class-by-id",
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateClass"
+        },
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["classes"],
+        "summary": "delete class by id",
+        "description": "Menghapus data class dengan id",
+        "operationId": "delete-class-by-id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/classes/chapters": {
+      "post": {
+        "tags": ["classes"],
+        "summary": "create data chapter",
+        "description": "create data chapter",
+        "operationId": "create-chapter",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateChapter"
+        },
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/general/categories": {
       "get": {
         "tags": ["general"],
@@ -513,6 +692,10 @@
                   "type": "string",
                   "example": "l@gmail.com"
                 },
+                "admin_id": {
+                  "type": "string",
+                  "example": "Realskillsadmin2023 (hanya untuk login admin)"
+                },
                 "password": {
                   "type": "string",
                   "example": "Realskills123"
@@ -581,6 +764,138 @@
                 "profile_picture": {
                   "type": "string",
                   "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateClass": {
+        "description": "Create class body example",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Web Development"
+                },
+                "code": {
+                  "type": "string",
+                  "example": "Realskills123"
+                },
+                "price": {
+                  "type": "number",
+                  "example": 100000
+                },
+                "author": {
+                  "type": "string",
+                  "example": "Realskills"
+                },
+                "about": {
+                  "type": "string",
+                  "example": " proses pembangunan dan pemeliharaan website. Proses ini bekerja di belakang layar untuk membuat website yang menarik dan berfungsi dengan baik guna meningkatkan user experience. Dalam web development, ada tiga hal utama yang harus dipelajari yaitu HTML, CSS, dan JavaScript"
+                },
+                "category_id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "type_id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "level_id": {
+                  "type": "number",
+                  "example": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateClass": {
+        "description": "Update class body example",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Web Development"
+                },
+                "code": {
+                  "type": "string",
+                  "example": "Realskills123"
+                },
+                "price": {
+                  "type": "number",
+                  "example": 100000
+                },
+                "author": {
+                  "type": "string",
+                  "example": "Realskills"
+                },
+                "modules": {
+                  "type": "number",
+                  "example": 5
+                },
+                "about": {
+                  "type": "string",
+                  "example": " proses pembangunan dan pemeliharaan website. Proses ini bekerja di belakang layar untuk membuat website yang menarik dan berfungsi dengan baik guna meningkatkan user experience. Dalam web development, ada tiga hal utama yang harus dipelajari yaitu HTML, CSS, dan JavaScript"
+                },
+                "category_id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "type_id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "level_id": {
+                  "type": "number",
+                  "example": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateChapter": {
+        "description": "Create chapter body example, time = waktu dalam menit",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "Introduction to Web Development"
+                },
+                "videos": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "example": "Introduction to HTML"
+                      },
+                      "link": {
+                        "type": "string",
+                        "example": "https://realskillsacademy.com/html"
+                      },
+                      "time": {
+                        "type": "number",
+                        "example": 60
+                      }
+                    }
+                  }
+                },
+                "class_id": {
+                  "type": "string",
+                  "example": "15ce16e7-44ee-476d-b8d0-def01da064d1"
                 }
               }
             }

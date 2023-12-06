@@ -18,6 +18,6 @@ router.use("/auth", auth);
 router.use("/users", user);
 router.use("/profiles", profile);
 router.use("/general", general);
-router.use("/class", course);
+router.use("/classes", course);
 
 module.exports = router;

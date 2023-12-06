@@ -2,6 +2,7 @@ const prisma = require("../libs/prisma");
 const { VSUpdateProfile } = require("../libs/validation/profile");
 const cloudinary = require("../libs/cloudinary");
 
+// Update Profile berdasarkan id user
 const updateProfile = async (req, res, next) => {
   try {
     const user = req.user;

@@ -1,6 +1,7 @@
 const prisma = require("../libs/prisma");
 const getPagination = require("../utils/pagination");
 
+// Mengambil data user berdasarkan id
 const getUserById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -24,6 +25,7 @@ const getUserById = async (req, res, next) => {
   }
 };
 
+// Mengambil semua data user
 const getAllUsers = async (req, res, next) => {
   try {
     let { limit = 5, page = 1 } = req.query;
@@ -75,6 +77,7 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
+// Menghapus data user berdasarkan id
 const deleteUser = async (req, res, next) => {
   try {
     const { id } = req.params;

@@ -1,5 +1,6 @@
 const prisma = require("../libs/prisma");
 
+// Menampilkan semua category
 const getAllCategory = async (req, res, next) => {
   try {
     const categories = await prisma.categories.findMany();
@@ -22,6 +23,7 @@ const getAllCategory = async (req, res, next) => {
   }
 };
 
+// Menampilkan semua level
 const getAllLevel = async (req, res, next) => {
   try {
     const levels = await prisma.levels.findMany();
@@ -44,6 +46,7 @@ const getAllLevel = async (req, res, next) => {
   }
 };
 
+// Menampilkan semua type
 const getAllTypes = async (req, res, next) => {
   try {
     const types = await prisma.types.findMany();

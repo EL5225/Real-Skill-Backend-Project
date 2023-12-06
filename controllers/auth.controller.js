@@ -6,6 +6,7 @@ const { sendEmail } = require("../utils/nodemailer");
 const { emailTemplate } = require("../utils/email");
 const { JWT_SECRET } = process.env;
 
+// Register User
 const register = async (req, res, next) => {
   try {
     const { name, email, password, confirm_password, phone_number } = req.body;
@@ -84,6 +85,7 @@ const register = async (req, res, next) => {
   }
 };
 
+// Login User / Admin
 const login = async (req, res, next) => {
   try {
     const { email, password, admin_id } = req.body;
@@ -131,6 +133,7 @@ const login = async (req, res, next) => {
     const token = jwt.sign(
       {
         id: user.id,
+        role: user.role,
       },
       JWT_SECRET,
     );
@@ -154,6 +157,7 @@ const login = async (req, res, next) => {
   }
 };
 
+// Authenticated User / admin
 const authenticated = async (req, res, next) => {
   try {
     const user = req.user;
@@ -175,6 +179,7 @@ const authenticated = async (req, res, next) => {
   }
 };
 
+// Forgot Password User
 const forgotPassword = async (req, res, next) => {
   try {
     const { email, phone_number } = req.body;
@@ -234,6 +239,7 @@ const forgotPassword = async (req, res, next) => {
   }
 };
 
+// Reset Password user
 const resetPassword = async (req, res, next) => {
   try {
     const user = req.user;
@@ -268,6 +274,7 @@ const resetPassword = async (req, res, next) => {
   }
 };
 
+// Verify User
 const verifyUser = async (req, res, next) => {
   try {
     const user = req.user;

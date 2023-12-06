@@ -1,4 +1,5 @@
 const prisma = require("../libs/prisma");
+const { VScreatePublicNotification } = require("../libs/validation/general");
 
 // Menampilkan semua category
 const getAllCategory = async (req, res, next) => {
@@ -68,8 +69,29 @@ const getAllTypes = async (req, res, next) => {
   }
 };
 
+const createPublicNotifications = async (req, res, next) => {
+  try {
+    const { title, body } = req.body;
+    VScreatePublicNotification.parse(req.body);
+    const notifications = await prisma.publicNotifications.create({
+      data: {
+        title,
+        body,
+      },
+    });
+    res.status(201).json({
+      status: true,
+      message: "Created Notification Success",
+      data: notifications,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllCategory,
   getAllLevel,
   getAllTypes,
+  createPublicNotifications,
 };

@@ -1,5 +1,6 @@
 const prisma = require("../libs/prisma");
 const getPagination = require("../utils/pagination");
+const { VScreateNotification } = require("../libs/validation/user");
 
 // Mengambil data user berdasarkan id
 const getUserById = async (req, res, next) => {
@@ -100,8 +101,42 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
+const createNotifications = async (req, res, next) => {
+  try {
+    const { title, body, user_id } = req.body;
+    VScreateNotification.parse(req.body);
+    const user = await prisma.user.findUnique({ where: { id: user_id } });
+    if (!user) {
+      return res.status(400).json({
+        status: false,
+        message: "Bad Request",
+        data: "User Not Found",
+      });
+    }
+    const notifications = await prisma.notifications.create({
+      data: {
+        title,
+        body,
+        user: {
+          connect: {
+            id: user_id,
+          },
+        },
+      },
+    });
+    res.status(201).json({
+      status: true,
+      message: "Created Notification Success",
+      data: notifications,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   deleteUser,
   getAllUsers,
   getUserById,
+  createNotifications,
 };

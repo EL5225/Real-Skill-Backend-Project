@@ -131,8 +131,38 @@ const VSCreateChapter = z.object({
   }),
 });
 
+const VSCUpdateChapter = z.object({
+  title: z
+    .string({
+      invalid_type_error: "title harus berupa string",
+    })
+    .optional(),
+  videos: z
+    .array(
+      z.object({
+        title: z
+          .string({
+            invalid_type_error: "title harus berupa string",
+          })
+          .optional(),
+        link: z
+          .string({
+            invalid_type_error: "link harus berupa string",
+          })
+          .optional(),
+        time: z
+          .number({
+            invalid_type_error: "time harus berupa angka",
+          })
+          .optional(),
+      }),
+    )
+    .optional(),
+});
+
 module.exports = {
   VSCreateClass,
   VSCUpdateClass,
   VSCreateChapter,
+  VSCUpdateChapter,
 };

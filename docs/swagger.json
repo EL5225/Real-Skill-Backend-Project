@@ -507,6 +507,42 @@
         }
       }
     },
+
+    "/classes/chapters/{id}": {
+      "put": {
+        "tags": ["classes"],
+        "summary": "update chapter",
+        "description": "update chapter by class_id",
+        "operationId": "put-chapter-by-class_id",
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chapter berhasil diperbarui"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Chapter tidak ditemukan"
+          }
+        }
+      }
+    },
+
     "/general/categories": {
       "get": {
         "tags": ["general"],

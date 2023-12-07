@@ -618,24 +618,6 @@
           }
         }
       }
-    },
-    "/general/notifications": {
-      "post": {
-        "tags": [
-          "general"
-        ],
-        "summary": "post public notifications",
-        "description": "post data notifications",
-        "operationId": "post-notifications",
-        "requestBody": {
-          "$ref": "#/components/requestBodies/createPublicNotifications"
-        },
-        "responses": {
-          "201": {
-            "description": "Created"
-          }
-        }
-      }
     }
   },
   "components": {
@@ -851,26 +833,6 @@
       },
       "createNotifications": {
         "description": "Create notifications user",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "title": {
-                  "type": "string",
-                  "example": "notification 1"
-                },
-                "body": {
-                  "type": "string",
-                  "example": "Promo terbaru kursus bulan ini"
-                }
-              }
-            }
-          }
-        }
-      },
-      "createPublicNotifications": {
-        "description": "Create notifications public",
         "content": {
           "application/json": {
             "schema": {

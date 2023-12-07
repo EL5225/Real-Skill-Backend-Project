@@ -52,14 +52,6 @@ model Notifications {
   created_at DateTime @default(now())
 }
 
-model PublicNotifications {
-  id         String   @id @default(uuid())
-  title      String
-  body       String
-  is_read    Boolean  @default(false)
-  created_at DateTime @default(now())
-}
-
 model Videos {
   id         String    @id @default(uuid())
   title      String

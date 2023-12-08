@@ -45,7 +45,17 @@ const authorizationHeader = (req, res, next) => {
         name: true,
         email: true,
         role: true,
+        is_verified: true,
         profile: true,
+        created_at: true,
+        notifications: {
+          select: {
+            id: true,
+            title: true,
+            body: true,
+            created_at: true,
+          },
+        },
       },
     });
     next();
@@ -79,6 +89,15 @@ const authorizationQuery = (req, res, next) => {
         email: true,
         is_verified: true,
         profile: true,
+        created_at: true,
+        notifications: {
+          select: {
+            id: true,
+            title: true,
+            body: true,
+            created_at: true,
+          },
+        },
       },
     });
     next();

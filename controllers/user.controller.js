@@ -6,7 +6,33 @@ const { VScreateNotification } = require("../libs/validation/user");
 const getUserById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const user = await prisma.user.findUnique({ where: { id } });
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        is_verified: true,
+        profile: {
+          select: {
+            id: true,
+            profile_picture: true,
+            phone_number: true,
+            updated_at: true,
+          },
+        },
+        notifications: {
+          select: {
+            id: true,
+            title: true,
+            body: true,
+            created_at: true,
+          },
+        },
+        created_at: true,
+      },
+    });
 
     if (!user) {
       return res.status(404).json({
@@ -104,10 +130,14 @@ const deleteUser = async (req, res, next) => {
 // Buat notifikasi ke semua user
 const createNotifications = async (req, res, next) => {
   try {
-    const { title, body } = req.body;
+    const { title, body, user_ids, is_all_user } = req.body;
     VScreateNotification.parse(req.body);
 
-    const users = await prisma.user.findMany({ where: { is_verified: true } });
+    let filter = { is_verified: true };
+    if (!is_all_user && user_ids.length > 0) {
+      filter.id = { in: user_ids };
+    }
+    const users = await prisma.user.findMany({ where: filter });
 
     const notifications = await prisma.notifications.createMany({
       data: users.map((user) => ({

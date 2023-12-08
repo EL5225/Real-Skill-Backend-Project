@@ -1,5 +1,10 @@
 const prisma = require("../libs/prisma");
-const { VSCreateClass, VSCUpdateClass, VSCreateChapter } = require("../libs/validation/classes");
+const {
+  VSCreateClass,
+  VSCUpdateClass,
+  VSCreateChapter,
+  VSCUpdateChapter,
+} = require("../libs/validation/classes");
 const getPagination = require("../utils/pagination");
 
 // Fitur Membuat kelas
@@ -344,6 +349,57 @@ const createChapters = async (req, res, next) => {
   }
 };
 
+//Fitur memperbarui Chapter
+const updateChapter = async (req, res, next) => {
+  try {
+    const { title, videos, class_id } = req.body;
+    VSCUpdateChapter.parse(req.body);
+
+    const existingChapter = await prisma.chapters.findUnique({
+      where: {
+        id: class_id,
+      },
+    });
+
+    if (!existingChapter) {
+      return res.status(404).json({
+        status: false,
+        message: "Bad request",
+        error: "Chapter tidak ditemukan",
+      });
+    }
+
+    const updatedVideos = videos.map((element) => ({
+      title: element.title,
+      link: element.link,
+      time: element.time,
+    }));
+
+    const updatedChapter = await prisma.chapters.update({
+      where: {
+        id: class_id,
+      },
+      data: {
+        title,
+        videos: {
+          deleteMany: {},
+          createMany: {
+            data: updatedVideos,
+          },
+        },
+      },
+    });
+
+    res.status(200).json({
+      status: true,
+      message: "Chapter berhasil diperbarui",
+      data: updatedChapter,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createClass,
   createChapters,
@@ -351,4 +407,5 @@ module.exports = {
   getClassById,
   updateClass,
   deleteClass,
+  updateChapter,
 };

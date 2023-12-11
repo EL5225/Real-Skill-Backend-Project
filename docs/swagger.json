@@ -36,11 +36,46 @@
     }
   ],
   "paths": {
+    "/payments": {
+      "post": {
+        "tags": ["payments"],
+        "summary": "create new payment",
+        "description": "create new payment.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "payment_method": {
+                    "type": "string",
+                    "description": "Metode pembayaran yang digunakan."
+                  },
+                  "class_id": {
+                    "type": "string",
+                    "description": "ID kelas yang akan dibayar."
+                  }
+                },
+                "required": ["payment_method", "class_id"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Pembayaran berhasil dibuat."
+          },
+          "400": {
+            "description": "Permintaan tidak valid."
+          }
+        }
+      }
+    },
+
     "/auth/register": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "create new user",
         "description": "register a new user",
         "operationId": "post-register-user",
@@ -97,9 +132,7 @@
     },
     "/auth/login": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "login user",
         "description": "login a new user",
         "operationId": "post-login-user",
@@ -165,9 +198,7 @@
     },
     "/auth/authenticated": {
       "get": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "get authenticated user",
         "description": "authenticated user",
         "operationId": "get-authenticated-user",
@@ -188,9 +219,7 @@
     },
     "/auth/forgot-password": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "forgot password user",
         "description": "forgot password user",
         "operationId": "post-forgot-password-user",
@@ -209,9 +238,7 @@
     },
     "/auth/reset-password": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "reset password user",
         "description": "reset password user",
         "operationId": "post-reset-password-user",
@@ -240,9 +267,7 @@
     },
     "/users": {
       "get": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "get all user",
         "description": "Mendapatkan semua data user | pagination",
         "operationId": "get-users",
@@ -274,9 +299,7 @@
     },
     "/users/{id}": {
       "get": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "get user by id",
         "description": "Mendapatkan data user dengan id",
         "operationId": "get-user-by-id",
@@ -300,9 +323,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "delete user by id",
         "description": "Menghapus data user dengan id",
         "operationId": "delete-user-by-id",
@@ -328,9 +349,7 @@
     },
     "/users/notifications": {
       "post": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "create user notifications",
         "description": "Membuat notifikasi hanya untuk user",
         "operationId": "post-user-notifications",
@@ -354,9 +373,7 @@
     },
     "/profiles": {
       "put": {
-        "tags": [
-          "profiles"
-        ],
+        "tags": ["profiles"],
         "summary": "update data profile",
         "description": "Update data profile",
         "operationId": "put-profile",
@@ -380,9 +397,7 @@
     },
     "/classes": {
       "post": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "create data class",
         "description": "create data class",
         "operationId": "create-class",
@@ -404,9 +419,7 @@
         }
       },
       "get": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "get all class",
         "description": "Mendapatkan semua data class | pagination",
         "operationId": "get-classes",
@@ -443,9 +456,7 @@
     },
     "/classes/{id}": {
       "get": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "get class by id",
         "description": "Mendapatkan data class dengan id",
         "operationId": "get-class-by-id",
@@ -474,9 +485,7 @@
         }
       },
       "put": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "update data class by id",
         "description": "Update data class dengan id",
         "operationId": "put-class-by-id",
@@ -508,9 +517,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "delete class by id",
         "description": "Menghapus data class dengan id",
         "operationId": "delete-class-by-id",
@@ -541,9 +548,7 @@
     },
     "/classes/chapters": {
       "post": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "create data chapter",
         "description": "create data chapter",
         "operationId": "create-chapter",
@@ -603,9 +608,7 @@
 
     "/general/categories": {
       "get": {
-        "tags": [
-          "general"
-        ],
+        "tags": ["general"],
         "summary": "get categories class",
         "description": "get data categories",
         "operationId": "get-categories",
@@ -621,9 +624,7 @@
     },
     "/general/levels": {
       "get": {
-        "tags": [
-          "general"
-        ],
+        "tags": ["general"],
         "summary": "get levels class",
         "description": "get data levels",
         "operationId": "get-levels",
@@ -639,9 +640,7 @@
     },
     "/general/types": {
       "get": {
-        "tags": [
-          "general"
-        ],
+        "tags": ["general"],
         "summary": "get types class",
         "description": "get data types",
         "operationId": "get-types",
@@ -745,6 +744,7 @@
           }
         }
       },
+
       "CreateUser": {
         "description": "Create User body example",
         "content": {

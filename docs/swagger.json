@@ -442,6 +442,34 @@
               "type": "string"
             },
             "in": "query"
+          },
+          {
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          },
+          {
+            "name": "category",
+            "schema": {
+              "type": "number"
+            },
+            "in": "query"
+          },
+          {
+            "name": "type",
+            "schema": {
+              "type": "number"
+            },
+            "in": "query"
+          },
+          {
+            "name": "level",
+            "schema": {
+              "type": "number"
+            },
+            "in": "query"
           }
         ],
         "responses": {
@@ -890,10 +918,14 @@
       "CreateClass": {
         "description": "Create class body example",
         "content": {
-          "application/json": {
+          "multipart/form-data": {
             "schema": {
               "type": "object",
               "properties": {
+                "class_image": {
+                  "type": "string",
+                  "format": "binary"
+                },
                 "name": {
                   "type": "string",
                   "example": "Web Development"
@@ -926,7 +958,8 @@
                   "type": "number",
                   "example": 1
                 }
-              }
+              },
+              "required": ["name", "code", "author", "about", "category_id", "type_id", "level_id"]
             }
           }
         }

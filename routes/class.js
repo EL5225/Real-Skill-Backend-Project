@@ -9,16 +9,16 @@ const {
   updateChapter,
 } = require("../controllers/class.controller");
 const { guardAdmin } = require("../middlewares/auth");
+const { imageUpload } = require("../libs/multer");
+
 const course = Router();
 
-course.use(guardAdmin);
-
 course.get("/", getListClass);
-course.post("/", createClass);
+course.post("/", guardAdmin, imageUpload.single("class_image"), createClass);
 course.get("/:id", getClassById);
-course.put("/:id", updateClass);
-course.delete("/:id", deleteClass);
-course.post("/chapters", createChapters);
-course.put("/chapters/:id", updateChapter);
+course.put("/:id", guardAdmin, updateClass);
+course.delete("/:id", guardAdmin, deleteClass);
+course.post("/chapters", guardAdmin, createChapters);
+course.put("/chapters/:id", guardAdmin, updateChapter);
 
 module.exports = course;

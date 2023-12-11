@@ -11,10 +11,11 @@ const VSCreateClass = z.object({
   }),
   price: z
     .number({
-      required_error: "price harus diisi",
       invalid_type_error: "price harus berupa angka",
     })
-    .min(1, { message: "price harus diisi" }),
+    .min(4, { message: "price harus minimal 4 digit" })
+    .nonnegative({ message: "price tidak boleh negatif" })
+    .optional(),
   about: z
     .string({
       required_error: "about harus diisi",

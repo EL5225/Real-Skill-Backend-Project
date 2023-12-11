@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const { VSResetPassword, VSRegister, VSLogin } = require("../libs/validation/auth");
 const { sendEmail } = require("../utils/nodemailer");
 const { emailTemplate } = require("../utils/email");
+const { queryUserByEmail, queryUserAdminId } = require("../utils/helpers/user");
 const { JWT_SECRET } = process.env;
 
 // Register User
@@ -21,11 +22,7 @@ const register = async (req, res, next) => {
       });
     }
 
-    const existingUser = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
+    const existingUser = await queryUserByEmail(email);
 
     if (existingUser) {
       return res.status(400).json({
@@ -92,17 +89,7 @@ const login = async (req, res, next) => {
 
     VSLogin.parse(req.body);
 
-    const user = email
-      ? await prisma.user.findUnique({
-          where: {
-            email,
-          },
-        })
-      : await prisma.user.findUnique({
-          where: {
-            admin_id: admin_id,
-          },
-        });
+    const user = email ? await queryUserByEmail(email) : await queryUserAdminId(admin_id);
 
     if (!user) {
       return res.status(400).json({
@@ -120,7 +107,11 @@ const login = async (req, res, next) => {
       });
     }
 
-    const isPasswordValid = bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password).then((result) => {
+      return result;
+    });
+
+    console.log(isPasswordValid);
 
     if (!isPasswordValid) {
       return res.status(400).json({
@@ -185,7 +176,7 @@ const forgotPassword = async (req, res, next) => {
     const { email, phone_number } = req.body;
 
     const user = email
-      ? await prisma.user.findUnique({ where: { email } })
+      ? await queryUserByEmail(email)
       : await prisma.profiles.findUnique({
           where: {
             phone_number,

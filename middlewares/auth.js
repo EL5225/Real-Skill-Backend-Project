@@ -137,7 +137,7 @@ const guardAdmin = (req, res, next) => {
       return res.status(503).json({
         status: false,
         message: "Forbidden Resource",
-        error: "Tidak bisa akses aplikasi ini",
+        error: "Akses ditolak",
       });
     }
 

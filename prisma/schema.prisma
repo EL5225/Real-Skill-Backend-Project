@@ -75,9 +75,10 @@ model Chapters {
 
 model Classes {
   id          String      @id @default(uuid())
+  image_url   String?
   name        String?
   code        String?     @unique
-  price       Int?
+  price       Int?        @default(0)
   about       String?
   modules     Int?
   author      String?

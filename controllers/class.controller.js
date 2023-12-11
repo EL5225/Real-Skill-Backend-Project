@@ -6,7 +6,8 @@ const {
   VSCUpdateChapter,
 } = require("../libs/validation/classes");
 const getPagination = require("../utils/pagination");
-
+const cloudinary = require("../libs/cloudinary");
+const { queryClassById } = require("../utils/helpers/class");
 // Fitur Membuat kelas
 const createClass = async (req, res, next) => {
   try {
@@ -77,36 +78,51 @@ const createClass = async (req, res, next) => {
       });
     }
 
-    const newClass = await prisma.classes.create({
-      data: {
-        name,
-        code,
-        price: Number(price),
-        about,
-        author,
-        category: {
-          connect: {
-            id: Number(category_id),
-          },
-        },
-        type: {
-          connect: {
-            id: Number(type_id),
-          },
-        },
-        level: {
-          connect: {
-            id: Number(level_id),
-          },
-        },
-      },
-    });
+    const timestamp = Date.now();
+    const public_id = `class_${timestamp}_realskills`;
 
-    res.status(201).json({
-      status: true,
-      message: "Berhasil menambahkan kelas",
-      data: newClass,
-    });
+    cloudinary.uploader
+      .upload_stream({ resource_type: "image", public_id }, async (err, result) => {
+        if (err) {
+          return res.status(500).json({
+            status: false,
+            message: "Internal Server Error",
+            error: err.message,
+          });
+        }
+        const newClass = await prisma.classes.create({
+          data: {
+            image_url: result.secure_url,
+            name,
+            code,
+            price: Number(price),
+            about,
+            author,
+            category: {
+              connect: {
+                id: Number(category_id),
+              },
+            },
+            type: {
+              connect: {
+                id: Number(type_id),
+              },
+            },
+            level: {
+              connect: {
+                id: Number(level_id),
+              },
+            },
+          },
+        });
+
+        res.status(201).json({
+          status: true,
+          message: "Berhasil menambahkan kelas",
+          data: newClass,
+        });
+      })
+      .end(req.file.buffer);
   } catch (error) {
     next(error);
   }
@@ -115,14 +131,51 @@ const createClass = async (req, res, next) => {
 // Fitur Menampilkan daftar semua kelas
 const getListClass = async (req, res, next) => {
   try {
-    let { limit = 5, page = 1 } = req.query;
+    let { search, category, type, level, limit = 5, page = 1 } = req.query;
     limit = Number(limit);
     page = Number(page);
 
+    const whereClause = {
+      name: {
+        contains: search,
+        mode: "insensitive",
+      },
+      category_id: category
+        ? {
+            equals: Number(category),
+          }
+        : undefined,
+      type_id: type
+        ? {
+            equals: Number(type),
+          }
+        : undefined,
+      level_id: level
+        ? {
+            equals: Number(level),
+          }
+        : undefined,
+    };
+
+    const { _count } = await prisma.classes.aggregate({
+      where: whereClause,
+      _count: { id: true },
+    });
+
     const classes = await prisma.classes.findMany({
+      where: whereClause,
       skip: (page - 1) * limit,
       take: limit,
+      include: {
+        chapters: {
+          select: {
+            title: true,
+            videos: true,
+          },
+        },
+      },
     });
+
     if (!classes || classes.length === 0) {
       return res.status(404).json({
         status: false,
@@ -130,10 +183,6 @@ const getListClass = async (req, res, next) => {
         error: "kelas tidak ada",
       });
     }
-
-    const { _count } = await prisma.classes.aggregate({
-      _count: { id: true },
-    });
 
     const pagination = getPagination(req, _count.id, page, limit);
 
@@ -151,30 +200,7 @@ const getListClass = async (req, res, next) => {
 const getClassById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const classes = await prisma.classes.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        chapters: {
-          select: {
-            id: true,
-            title: true,
-            is_completed: true,
-            created_at: true,
-            videos: {
-              select: {
-                id: true,
-                title: true,
-                link: true,
-                time: true,
-                is_watched: true,
-              },
-            },
-          },
-        },
-      },
-    });
+    const classes = await queryClassById(id);
     if (!classes) {
       return res.status(404).json({
         status: false,
@@ -199,12 +225,7 @@ const updateClass = async (req, res, next) => {
     const { name, code, price, about, author, modules, category_id, type_id, level_id } = req.body;
     VSCUpdateClass.parse(req.body);
 
-    const existingClass = await prisma.classes.findUnique({
-      where: {
-        id,
-      },
-    });
-
+    const existingClass = await queryClassById(id);
     if (!existingClass) {
       return res.status(404).json({
         status: false,
@@ -246,11 +267,7 @@ const deleteClass = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const existingClass = await prisma.classes.findUnique({
-      where: {
-        id,
-      },
-    });
+    const existingClass = await queryClassById(id);
 
     if (!existingClass) {
       return res.status(404).json({
@@ -282,11 +299,7 @@ const createChapters = async (req, res, next) => {
     const { title, videos, class_id } = req.body;
     VSCreateChapter.parse(req.body);
 
-    const existingClass = await prisma.classes.findUnique({
-      where: {
-        id: class_id,
-      },
-    });
+    const existingClass = await queryClassById(class_id);
 
     if (!existingClass) {
       return res.status(400).json({
@@ -355,11 +368,7 @@ const updateChapter = async (req, res, next) => {
     const { title, videos, class_id } = req.body;
     VSCUpdateChapter.parse(req.body);
 
-    const existingChapter = await prisma.chapters.findUnique({
-      where: {
-        id: class_id,
-      },
-    });
+    const existingChapter = await queryClassById(class_id);
 
     if (!existingChapter) {
       return res.status(404).json({

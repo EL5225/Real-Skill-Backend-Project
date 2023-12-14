@@ -28,6 +28,14 @@ const createClass = async (req, res, next) => {
       });
     }
 
+    if (Number(price) < 0) {
+      return res.status(400).json({
+        status: false,
+        message: "Bad Request",
+        error: "Harga harus berupa angka positif",
+      });
+    }
+
     if (!category_id || !type_id || !level_id) {
       return res.status(400).json({
         status: false,

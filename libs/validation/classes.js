@@ -9,13 +9,7 @@ const VSCreateClass = z.object({
     required_error: "code harus diisi",
     invalid_type_error: "code harus berupa string",
   }),
-  price: z
-    .number({
-      invalid_type_error: "price harus berupa angka",
-    })
-    .min(4, { message: "price harus minimal 4 digit" })
-    .nonnegative({ message: "price tidak boleh negatif" })
-    .optional(),
+  price: z.string().min(4, { message: "price harus minimal 4 digit" }).optional(),
   about: z
     .string({
       required_error: "about harus diisi",
@@ -30,21 +24,21 @@ const VSCreateClass = z.object({
     .min(1, { message: "author harus diisi" }),
 
   category_id: z
-    .number({
+    .string({
       required_error: "category_id harus diisi",
-      invalid_type_error: "category_id harus berupa id (number)",
+      invalid_type_error: "category_id harus berupa id (string)",
     })
     .min(1, { message: "category_id harus diisi" }),
   level_id: z
-    .number({
+    .string({
       required_error: "level_id harus diisi",
-      invalid_type_error: "level_id harus berupa id (number)",
+      invalid_type_error: "level_id harus berupa id (string)",
     })
     .min(1, { message: "level_id harus diisi" }),
   type_id: z
-    .number({
+    .string({
       required_error: "type_id harus diisi",
-      invalid_type_error: "type_id harus berupa id (number)",
+      invalid_type_error: "type_id harus berupa id (string)",
     })
     .min(1, { message: "type_id harus diisi" }),
 });

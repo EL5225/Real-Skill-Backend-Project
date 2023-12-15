@@ -373,10 +373,25 @@ const createChapters = async (req, res, next) => {
 //Fitur memperbarui Chapter
 const updateChapter = async (req, res, next) => {
   try {
+    const { id } = req.params;
     const { title, videos, class_id } = req.body;
     VSCUpdateChapter.parse(req.body);
 
-    const existingChapter = await queryClassById(class_id);
+    const existingClass = await queryClassById(class_id);
+
+    if (!existingClass) {
+      return res.status(404).json({
+        status: false,
+        message: "Bad request",
+        error: "Class tidak ditemukan",
+      });
+    }
+
+    const existingChapter = await prisma.chapters.findUnique({
+      where: {
+        id,
+      },
+    });
 
     if (!existingChapter) {
       return res.status(404).json({
@@ -394,7 +409,7 @@ const updateChapter = async (req, res, next) => {
 
     const updatedChapter = await prisma.chapters.update({
       where: {
-        id: class_id,
+        id,
       },
       data: {
         title,
@@ -404,6 +419,14 @@ const updateChapter = async (req, res, next) => {
             data: updatedVideos,
           },
         },
+        class: {
+          connect: {
+            id: class_id,
+          },
+        },
+      },
+      include: {
+        videos: true,
       },
     });
 

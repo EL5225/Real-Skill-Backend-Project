@@ -9,7 +9,7 @@ const VSCreateClass = z.object({
     required_error: "code harus diisi",
     invalid_type_error: "code harus berupa string",
   }),
-  price: z.string().min(4, { message: "price harus minimal 4 digit" }).optional(),
+  price: z.string().optional(),
   about: z
     .string({
       required_error: "about harus diisi",

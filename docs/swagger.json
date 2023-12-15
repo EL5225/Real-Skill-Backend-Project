@@ -620,6 +620,9 @@
             "bearerAuth": []
           }
         ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateChapter"
+        },
         "responses": {
           "200": {
             "description": "Chapter berhasil diperbarui"
@@ -1046,6 +1049,42 @@
                 "class_id": {
                   "type": "string",
                   "example": "15ce16e7-44ee-476d-b8d0-def01da064d1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateChapter": {
+        "description": "Update chapter body example",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "Introduction to Web Development"
+                },
+                "videos": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "example": "Introduction to HTML"
+                      },
+                      "link": {
+                        "type": "string",
+                        "example": "https://realskillsacademy.com/html"
+                      },
+                      "time": {
+                        "type": "number",
+                        "example": 60
+                      }
+                    }
+                  }
                 }
               }
             }

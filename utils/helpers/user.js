@@ -49,6 +49,7 @@ const queryUserById = async (id) => {
           created_at: true,
         },
       },
+      class: true,
       created_at: true,
     },
   });

@@ -21,20 +21,20 @@ const authorizationHeader = (req, res, next) => {
 
   const token = authorization.split(" ")[1];
 
-  if (token.role !== "USER") {
-    return res.status(503).json({
-      status: false,
-      message: "Forbidden Resource",
-      error: "Tidak bisa akses aplikasi ini",
-    });
-  }
-
   jwt.verify(token, JWT_SECRET, async (err, decoded) => {
     if (err) {
       return res.status(401).json({
         status: false,
         message: "Unauthorized",
         error: err.message,
+      });
+    }
+
+    if (decoded.role !== "USER") {
+      return res.status(503).json({
+        status: false,
+        message: "Forbidden Resource",
+        error: "Akses ditolak",
       });
     }
 
@@ -56,6 +56,7 @@ const authorizationHeader = (req, res, next) => {
             created_at: true,
           },
         },
+        class: true,
       },
     });
     next();
@@ -142,13 +143,32 @@ const guardAdmin = (req, res, next) => {
     }
 
     req.user = await prisma.user.findUnique({
-      where: { id: decoded.id },
+      where: {
+        id: decoded.id,
+      },
       select: {
         id: true,
         name: true,
         email: true,
         role: true,
-        profile: true,
+        profile: {
+          select: {
+            id: true,
+            profile_picture: true,
+            phone_number: true,
+            updated_at: true,
+          },
+        },
+        notifications: {
+          select: {
+            id: true,
+            title: true,
+            body: true,
+            created_at: true,
+          },
+        },
+        class: true,
+        created_at: true,
       },
     });
     next();

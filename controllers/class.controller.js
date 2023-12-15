@@ -28,14 +28,6 @@ const createClass = async (req, res, next) => {
       });
     }
 
-    if (Number(price) < 0) {
-      return res.status(400).json({
-        status: false,
-        message: "Bad Request",
-        error: "Harga harus berupa angka positif",
-      });
-    }
-
     if (!category_id || !type_id || !level_id) {
       return res.status(400).json({
         status: false,
@@ -373,25 +365,10 @@ const createChapters = async (req, res, next) => {
 //Fitur memperbarui Chapter
 const updateChapter = async (req, res, next) => {
   try {
-    const { id } = req.params;
     const { title, videos, class_id } = req.body;
     VSCUpdateChapter.parse(req.body);
 
-    const existingClass = await queryClassById(class_id);
-
-    if (!existingClass) {
-      return res.status(404).json({
-        status: false,
-        message: "Bad request",
-        error: "Class tidak ditemukan",
-      });
-    }
-
-    const existingChapter = await prisma.chapters.findUnique({
-      where: {
-        id,
-      },
-    });
+    const existingChapter = await queryClassById(class_id);
 
     if (!existingChapter) {
       return res.status(404).json({
@@ -409,7 +386,7 @@ const updateChapter = async (req, res, next) => {
 
     const updatedChapter = await prisma.chapters.update({
       where: {
-        id,
+        id: class_id,
       },
       data: {
         title,
@@ -419,14 +396,6 @@ const updateChapter = async (req, res, next) => {
             data: updatedVideos,
           },
         },
-        class: {
-          connect: {
-            id: class_id,
-          },
-        },
-      },
-      include: {
-        videos: true,
       },
     });
 

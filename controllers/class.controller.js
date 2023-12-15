@@ -7,7 +7,7 @@ const {
 } = require("../libs/validation/classes");
 const getPagination = require("../utils/pagination");
 const cloudinary = require("../libs/cloudinary");
-const { queryClassById } = require("../utils/helpers/class");
+const { queryClassById, queryChaptersById } = require("../utils/helpers/class");
 // Fitur Membuat kelas
 const createClass = async (req, res, next) => {
   try {
@@ -169,8 +169,17 @@ const getListClass = async (req, res, next) => {
       include: {
         chapters: {
           select: {
+            id: true,
             title: true,
-            videos: true,
+            videos: {
+              select: {
+                id: true,
+                title: true,
+                link: true,
+                time: true,
+                is_watched: true,
+              },
+            },
           },
         },
       },
@@ -365,10 +374,11 @@ const createChapters = async (req, res, next) => {
 //Fitur memperbarui Chapter
 const updateChapter = async (req, res, next) => {
   try {
-    const { title, videos, class_id } = req.body;
+    const { id } = req.params;
+    const { title, videos } = req.body;
     VSCUpdateChapter.parse(req.body);
 
-    const existingChapter = await queryClassById(class_id);
+    const existingChapter = await queryChaptersById(id);
 
     if (!existingChapter) {
       return res.status(404).json({
@@ -386,12 +396,11 @@ const updateChapter = async (req, res, next) => {
 
     const updatedChapter = await prisma.chapters.update({
       where: {
-        id: class_id,
+        id,
       },
       data: {
         title,
         videos: {
-          deleteMany: {},
           createMany: {
             data: updatedVideos,
           },

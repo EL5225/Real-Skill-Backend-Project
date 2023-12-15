@@ -1,24 +1,35 @@
 const prisma = require("../libs/prisma");
+const { VSCreatePayment } = require("../libs/validation/payment");
 
 const createPayment = async (req, res, next) => {
   try {
-    const { payment_method, class_id } = req.body;
-
-    if (!payment_method || !class_id) {
-      return res.status(400).json({ error: "Masukkan metode pembayaran dan ID kelas" });
-    }
-
+    const { payment_method, class_id, user_id } = req.body;
+    VSCreatePayment.parse(req.body);
     const newPayment = await prisma.payments.create({
       data: {
         payment_method,
-        class_id,
+        class: {
+          connect: {
+            id: class_id,
+          },
+        },
+        user: {
+          connect: {
+            id: user_id,
+          },
+        },
       },
     });
 
-    return res.status(200).json({ message: "Pembayaran berhasil dibuat", payment: newPayment });
+    return res.status(200).json({
+      message: "Pembayaran berhasil dibuat",
+      data: newPayment,
+    });
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = { createPayment };
+module.exports = {
+  createPayment,
+};

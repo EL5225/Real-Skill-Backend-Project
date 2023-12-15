@@ -351,7 +351,7 @@
       "post": {
         "tags": ["users"],
         "summary": "create user notifications",
-        "description": "Membuat notifikasi hanya untuk user",
+        "description": "Membuat notifikasi hanya untuk user | pilih salah satu antara user_ids atau is_all_user. Jika ingin mengirim ke semua user, isi is_all_user dengan true. Jika ingin mengirim ke beberapa user, isi user_ids dengan id user yang ingin dikirim dalam bentu array, dan isi is_all_user dengan false. Notifikasi hanya akan muncul pada user yang sudah verifikasi akun",
         "operationId": "post-user-notifications",
         "security": [
           {
@@ -912,6 +912,17 @@
                 "body": {
                   "type": "string",
                   "example": "Promo terbaru kursus bulan ini"
+                },
+                "user_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "example": "00kg6e7-64fe-mk06-p034-iaj85damk0d1"
+                  }
+                },
+                "is_all_user": {
+                  "type": "boolean",
+                  "example": true
                 }
               }
             }

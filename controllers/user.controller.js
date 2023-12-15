@@ -51,6 +51,17 @@ const getAllUsers = async (req, res, next) => {
             updated_at: true,
           },
         },
+        notifications: {
+          select: {
+            id: true,
+            title: true,
+            body: true,
+            created_at: true,
+            is_read: true,
+          },
+        },
+        class: true,
+
         created_at: true,
       },
     });

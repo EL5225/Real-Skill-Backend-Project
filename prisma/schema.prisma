@@ -80,6 +80,7 @@ model Classes {
   code        String?     @unique
   price       Int?        @default(0)
   about       String?
+  goals       String[]
   modules     Int?
   author      String?
   category    Categories? @relation(fields: [category_id], references: [id], onUpdate: NoAction)

@@ -11,7 +11,7 @@ const { queryClassById, queryChaptersById } = require("../utils/helpers/class");
 // Fitur Membuat kelas
 const createClass = async (req, res, next) => {
   try {
-    const { name, code, price, about, author, category_id, type_id, level_id } = req.body;
+    const { name, code, price, about, goals, author, category_id, type_id, level_id } = req.body;
     VSCreateClass.parse(req.body);
 
     const existClass = await prisma.classes.findUnique({
@@ -25,14 +25,6 @@ const createClass = async (req, res, next) => {
         status: false,
         message: "Bad Request",
         error: "Code kelas sudah ada",
-      });
-    }
-
-    if (Number(price) < 0) {
-      return res.status(400).json({
-        status: false,
-        message: "Bad Request",
-        error: "Harga harus berupa angka positif",
       });
     }
 
@@ -86,6 +78,8 @@ const createClass = async (req, res, next) => {
       });
     }
 
+    const parsedGoals = Array.isArray(goals) ? goals : goals.split(",").map((goal) => goal.trim());
+
     const timestamp = Date.now();
     const public_id = `class_${timestamp}_realskills`;
 
@@ -105,6 +99,7 @@ const createClass = async (req, res, next) => {
             code,
             price: Number(price),
             about,
+            goals: parsedGoals,
             author,
             category: {
               connect: {

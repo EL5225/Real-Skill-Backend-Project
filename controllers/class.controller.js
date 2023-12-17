@@ -79,7 +79,9 @@ const createClass = async (req, res, next) => {
       });
     }
 
-    const parsedGoals = Array.isArray(goals) ? goals : goals.split(",").map((goal) => goal.trim());
+    const parsedGoals = Array.isArray(goals)
+      ? goals
+      : goals?.split(",")?.map((goal) => goal?.trim());
 
     const timestamp = Date.now();
     const public_id = `class_${timestamp}_realskills`;

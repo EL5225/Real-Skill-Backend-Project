@@ -634,6 +634,99 @@
             "description": "Chapter tidak ditemukan"
           }
         }
+      },
+      "delete": {
+        "tags": ["classes"],
+        "summary": "delete chapter",
+        "description": "delete chapter by class_id",
+        "operationId": "delete-chapter-by-class_id",
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chapter berhasil di hapus"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+
+    "/classes/chapters/videos/{id}": {
+      "put": {
+        "tags": ["classes"],
+        "summary": "update video",
+        "description": "update video by class_id",
+        "operationId": "put-video-by-class_id",
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateVideo"
+        },
+        "responses": {
+          "200": {
+            "description": "Video berhasil diperbarui"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["classes"],
+        "summary": "delete video",
+        "description": "delete video by class_id",
+        "operationId": "delete-video-by-class_id",
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Video berhasil di hapus"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
       }
     },
 
@@ -962,11 +1055,7 @@
                 },
                 "goals": {
                   "type": "array",
-                  "example": [
-                    "1. Memahami HTML",
-                    "2. Memahami CSS",
-                    "3. Memahami JavaScript"
-                  ]
+                  "example": ["1. Memahami HTML", "2. Memahami CSS", "3. Memahami JavaScript"]
                 },
                 "category_id": {
                   "type": "number",
@@ -981,7 +1070,16 @@
                   "example": 1
                 }
               },
-              "required": ["name", "code", "author", "about", "goals", "category_id", "type_id", "level_id"]
+              "required": [
+                "name",
+                "code",
+                "author",
+                "about",
+                "goals",
+                "category_id",
+                "type_id",
+                "level_id"
+              ]
             }
           }
         }
@@ -1104,6 +1202,30 @@
                       }
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateVideo": {
+        "description": "Update video body example",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "Introduction to Web Development"
+                },
+                "link": {
+                  "type": "string",
+                  "example": "https://realskillsacademy.com/html"
+                },
+                "time": {
+                  "type": "number",
+                  "example": 60
                 }
               }
             }

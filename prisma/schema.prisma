@@ -54,9 +54,9 @@ model Notifications {
 
 model Videos {
   id         String    @id @default(uuid())
-  title      String
-  link       String
-  time       Int
+  title      String?
+  link       String?
+  time       Int?
   is_watched Boolean   @default(false)
   chapter    Chapters? @relation(fields: [chapter_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
   chapter_id String?

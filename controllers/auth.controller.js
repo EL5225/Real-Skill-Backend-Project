@@ -5,6 +5,7 @@ const { VSResetPassword, VSRegister, VSLogin } = require("../libs/validation/aut
 const { sendEmail } = require("../utils/nodemailer");
 const { emailTemplate } = require("../utils/email");
 const { queryUserByEmail, queryUserAdminId } = require("../utils/helpers/user");
+const { createUser } = require("../services/auth");
 const { JWT_SECRET } = process.env;
 
 // Register User
@@ -34,27 +35,7 @@ const register = async (req, res, next) => {
 
     const decryptedPassword = await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: decryptedPassword,
-        profile: {
-          create: {
-            phone_number,
-          },
-        },
-      },
-
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        created_at: true,
-        profile: true,
-      },
-    });
+    const user = await createUser(name, email, decryptedPassword, phone_number);
 
     const token = jwt.sign(
       {
@@ -110,8 +91,6 @@ const login = async (req, res, next) => {
     const isPasswordValid = await bcrypt.compare(password, user.password).then((result) => {
       return result;
     });
-
-    console.log(isPasswordValid);
 
     if (!isPasswordValid) {
       return res.status(400).json({

@@ -2,6 +2,7 @@ const prisma = require("../libs/prisma");
 const getPagination = require("../utils/pagination");
 const { VScreateNotification } = require("../libs/validation/user");
 const { queryUserById } = require("../utils/helpers/user");
+const { getAllUserService } = require("../services/user");
 
 // Mengambil data user berdasarkan id
 const getUserById = async (req, res, next) => {
@@ -34,37 +35,7 @@ const getAllUsers = async (req, res, next) => {
     limit = Number(limit);
     page = Number(page);
 
-    const users = await prisma.user.findMany({
-      skip: (page - 1) * limit,
-      take: limit,
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        is_verified: true,
-        profile: {
-          select: {
-            id: true,
-            profile_picture: true,
-            phone_number: true,
-            updated_at: true,
-          },
-        },
-        notifications: {
-          select: {
-            id: true,
-            title: true,
-            body: true,
-            created_at: true,
-            is_read: true,
-          },
-        },
-        class: true,
-
-        created_at: true,
-      },
-    });
+    const users = await getAllUserService(page, limit);
 
     const { _count } = await prisma.user.aggregate({
       _count: { id: true },

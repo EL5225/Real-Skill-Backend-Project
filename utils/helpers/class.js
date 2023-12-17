@@ -46,7 +46,35 @@ const queryChaptersById = async (id) => {
   });
 };
 
+const queryClassByCode = async (code) => {
+  return await prisma.classes.findUnique({
+    where: {
+      code,
+    },
+    include: {
+      chapters: {
+        select: {
+          id: true,
+          title: true,
+          is_completed: true,
+          created_at: true,
+          videos: {
+            select: {
+              id: true,
+              title: true,
+              link: true,
+              time: true,
+              is_watched: true,
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
 module.exports = {
   queryClassById,
   queryChaptersById,
+  queryClassByCode,
 };

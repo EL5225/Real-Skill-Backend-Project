@@ -7,18 +7,19 @@ const {
 } = require("../libs/validation/classes");
 const getPagination = require("../utils/pagination");
 const cloudinary = require("../libs/cloudinary");
-const { queryClassById, queryChaptersById } = require("../utils/helpers/class");
+const { queryClassById, queryChaptersById, queryClassByCode } = require("../utils/helpers/class");
+const {
+  deleteChapterService,
+  updateChapterModuleService,
+  createNewClassService,
+} = require("../services/class");
 // Fitur Membuat kelas
 const createClass = async (req, res, next) => {
   try {
     const { name, code, price, about, goals, author, category_id, type_id, level_id } = req.body;
     VSCreateClass.parse(req.body);
 
-    const existClass = await prisma.classes.findUnique({
-      where: {
-        code,
-      },
-    });
+    const existClass = await queryClassByCode(code);
 
     if (existClass) {
       return res.status(400).json({
@@ -92,32 +93,18 @@ const createClass = async (req, res, next) => {
             error: err.message,
           });
         }
-        const newClass = await prisma.classes.create({
-          data: {
-            image_url: result.secure_url,
-            name,
-            code,
-            price: Number(price),
-            about,
-            goals: parsedGoals,
-            author,
-            category: {
-              connect: {
-                id: Number(category_id),
-              },
-            },
-            type: {
-              connect: {
-                id: Number(type_id),
-              },
-            },
-            level: {
-              connect: {
-                id: Number(level_id),
-              },
-            },
-          },
-        });
+        const newClass = await createNewClassService(
+          result.secure_url,
+          name,
+          code,
+          price,
+          about,
+          parsedGoals,
+          author,
+          category_id,
+          type_id,
+          level_id,
+        );
 
         res.status(201).json({
           status: true,
@@ -346,23 +333,7 @@ const createChapters = async (req, res, next) => {
       },
     });
 
-    const { _count } = await prisma.chapters.aggregate({
-      where: {
-        class_id,
-      },
-      _count: {
-        id: true,
-      },
-    });
-
-    await prisma.classes.update({
-      where: {
-        id: class_id,
-      },
-      data: {
-        modules: _count.id,
-      },
-    });
+    await updateChapterModuleService(class_id);
 
     res.status(201).json({
       status: true,
@@ -421,6 +392,34 @@ const updateChapter = async (req, res, next) => {
   }
 };
 
+const deleteChapter = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const existingChapter = await queryChaptersById(id);
+
+    if (!existingChapter) {
+      return res.status(404).json({
+        status: false,
+        message: "Bad request",
+        error: "Chapter tidak ditemukan",
+      });
+    }
+
+    const chapter = await deleteChapterService(id);
+
+    await updateChapterModuleService(chapter.class_id);
+
+    res.status(200).json({
+      status: true,
+      message: "Chapter berhasil di hapus",
+      data: chapter,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createClass,
   createChapters,
@@ -429,4 +428,5 @@ module.exports = {
   updateClass,
   deleteClass,
   updateChapter,
+  deleteChapter,
 };

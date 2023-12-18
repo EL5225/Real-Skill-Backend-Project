@@ -1087,10 +1087,14 @@
       "UpdateClass": {
         "description": "Update class body example",
         "content": {
-          "application/json": {
+          "multipart/form-data": {
             "schema": {
               "type": "object",
               "properties": {
+                "class_image": {
+                  "type": "string",
+                  "format": "binary"
+                },
                 "name": {
                   "type": "string",
                   "example": "Web Development"
@@ -1106,10 +1110,6 @@
                 "author": {
                   "type": "string",
                   "example": "Realskills"
-                },
-                "modules": {
-                  "type": "number",
-                  "example": 5
                 },
                 "about": {
                   "type": "string",
@@ -1131,7 +1131,17 @@
                   "type": "number",
                   "example": 1
                 }
-              }
+              },
+              "required": [
+                "name",
+                "code",
+                "author",
+                "about",
+                "goals",
+                "category_id",
+                "type_id",
+                "level_id"
+              ]
             }
           }
         }

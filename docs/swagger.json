@@ -1115,6 +1115,10 @@
                   "type": "string",
                   "example": " proses pembangunan dan pemeliharaan website. Proses ini bekerja di belakang layar untuk membuat website yang menarik dan berfungsi dengan baik guna meningkatkan user experience. Dalam web development, ada tiga hal utama yang harus dipelajari yaitu HTML, CSS, dan JavaScript"
                 },
+                "goals": {
+                  "type": "array",
+                  "example": ["1. Memahami HTML", "2. Memahami CSS", "3. Memahami JavaScript"]
+                },
                 "category_id": {
                   "type": "number",
                   "example": 1

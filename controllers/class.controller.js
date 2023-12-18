@@ -223,7 +223,8 @@ const getClassById = async (req, res, next) => {
 const updateClass = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name, code, price, about, author, modules, category_id, type_id, level_id } = req.body;
+    const { name, code, price, about, goals, author, modules, category_id, type_id, level_id } =
+      req.body;
     VSCUpdateClass.parse(req.body);
 
     const existingClass = await queryClassById(id);
@@ -235,6 +236,10 @@ const updateClass = async (req, res, next) => {
       });
     }
 
+    const parsedGoals = Array.isArray(goals)
+      ? goals
+      : goals?.split(",")?.map((goal) => goal?.trim());
+
     const updatedClass = await prisma.classes.update({
       where: {
         id,
@@ -244,6 +249,7 @@ const updateClass = async (req, res, next) => {
         code,
         price: Number(price),
         about,
+        goals: parsedGoals,
         author,
         modules: modules ? Number(modules) : existingClass.modules,
         category_id: category_id ? Number(category_id) : existingClass.category_id,

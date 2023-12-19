@@ -33,50 +33,13 @@
     {
       "name": "general",
       "description": "Operations about general or public or common endpoint"
+    },
+    {
+      "name": "payments",
+      "description": "Operations about payments"
     }
   ],
   "paths": {
-    "/payments": {
-      "post": {
-        "tags": [
-          "payments"
-        ],
-        "summary": "create new payment",
-        "description": "create new payment.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "payment_method": {
-                    "type": "string",
-                    "description": "Metode pembayaran yang digunakan."
-                  },
-                  "class_id": {
-                    "type": "string",
-                    "description": "ID kelas yang akan dibayar."
-                  }
-                },
-                "required": [
-                  "payment_method",
-                  "class_id"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Pembayaran berhasil dibuat."
-          },
-          "400": {
-            "description": "Permintaan tidak valid."
-          }
-        }
-      }
-    },
     "/auth/register": {
       "post": {
         "tags": [
@@ -821,6 +784,139 @@
           },
           "400": {
             "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/payments": {
+      "post": {
+        "tags": ["payments"],
+        "summary": "create new payment",
+        "description": "create new payment.",
+        "operationId": "create-payment",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "payment_method": {
+                    "type": "string",
+                    "description": "Metode pembayaran yang digunakan."
+                  },
+                  "class_id": {
+                    "type": "string",
+                    "description": "ID kelas yang akan dibayar."
+                  }
+                },
+                "required": ["payment_method", "class_id"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Pembayaran berhasil dibuat."
+          },
+          "400": {
+            "description": "Permintaan tidak valid."
+          }
+        }
+      }
+    },
+    "/payments/paid/{class_id}": {
+      "get": {
+        "tags": ["payments"],
+        "summary": "update payment",
+        "description": "update payment user dari is_paid false menjadi true.",
+        "operationId": "update-payment",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "class_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pembayaran berhasil diperbarui."
+          },
+          "400": {
+            "description": "Permintaan tidak valid."
+          }
+        }
+      }
+    },
+    "/payments/{id}": {
+      "get": {
+        "tags": ["payments"],
+        "summary": "get payment by id",
+        "description": "get payment by id",
+        "operationId": "get-payment-by-id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pembayaran berhasil didapatkan."
+          },
+          "400": {
+            "description": "Permintaan tidak valid."
+          }
+        }
+      },
+      "delete": {
+        "tags": ["payments"],
+        "summary": "delete payment",
+        "description": "delete payment by id",
+        "operationId": "delete-payment-by-id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pembayaran berhasil dihapus."
+          },
+          "400": {
+            "description": "Permintaan tidak valid."
           }
         }
       }

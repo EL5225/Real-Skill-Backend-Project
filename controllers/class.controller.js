@@ -95,18 +95,18 @@ const createClass = async (req, res, next) => {
             error: err.message,
           });
         }
-        const newClass = await createNewClassService(
-          result.secure_url,
+        const newClass = await createNewClassService({
+          image_url: result?.secure_url,
           name,
           code,
           price,
           about,
-          parsedGoals,
+          goals: parsedGoals,
           author,
           category_id,
           type_id,
           level_id,
-        );
+        });
 
         res.status(201).json({
           status: true,

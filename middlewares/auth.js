@@ -57,6 +57,19 @@ const authorizationHeader = (req, res, next) => {
           },
         },
         class: true,
+        payments: {
+          include: {
+            class: {
+              select: {
+                id: true,
+                image_url: true,
+                name: true,
+                code: true,
+                price: true,
+              },
+            },
+          },
+        },
       },
     });
     next();
@@ -99,6 +112,8 @@ const authorizationQuery = (req, res, next) => {
             created_at: true,
           },
         },
+        class: true,
+        payments: true,
       },
     });
     next();

@@ -83,6 +83,7 @@ model Classes {
   goals       String[]
   modules     Int?
   author      String?
+  rating      Float?
   category    Categories? @relation(fields: [category_id], references: [id], onUpdate: NoAction)
   category_id Int?
   chapters    Chapters[]

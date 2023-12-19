@@ -30,40 +30,32 @@ const updateChapterModuleService = async (class_id) => {
   });
 };
 
-const createNewClassService = async (
-  image_url,
-  name,
-  code,
-  price,
-  about,
-  goals,
-  author,
-  category_id,
-  type_id,
-  level_id,
-) => {
+const createNewClassService = async (props) => {
+  const rating = Math.floor(5 * 10) / 10;
+
   return await prisma.classes.create({
     data: {
-      image_url,
-      name,
-      code,
-      price: Number(price),
-      about,
-      goals: goals,
-      author,
+      image_url: props?.image_url,
+      name: props?.name,
+      code: props?.code,
+      price: Number(props?.price),
+      about: props?.about,
+      goals: props?.goals,
+      author: props?.author,
+      rating: Number(rating),
       category: {
         connect: {
-          id: Number(category_id),
+          id: Number(props?.category_id),
         },
       },
       type: {
         connect: {
-          id: Number(type_id),
+          id: Number(props?.type_id),
         },
       },
       level: {
         connect: {
-          id: Number(level_id),
+          id: Number(props?.level_id),
         },
       },
     },

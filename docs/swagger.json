@@ -1326,6 +1326,10 @@
                 "time": {
                   "type": "number",
                   "example": 60
+                },
+                "is_watched": {
+                  "type": "boolean",
+                  "example": true
                 }
               }
             }

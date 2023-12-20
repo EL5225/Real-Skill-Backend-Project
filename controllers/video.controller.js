@@ -1,10 +1,12 @@
+const { VSEditVideo } = require("../libs/validation/video");
 const { editVideoService, deleteVideoService } = require("../services/video");
 const { queryVideoById } = require("../utils/helpers/video");
 
 const editVideo = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { title, body, time } = req.body;
+    const { title, body, time, is_watched } = req.body;
+    VSEditVideo.parse(req.body);
 
     const existingVideo = await queryVideoById(id);
 
@@ -15,7 +17,7 @@ const editVideo = async (req, res, next) => {
       });
     }
 
-    const video = await editVideoService(id, title, body, time);
+    const video = await editVideoService(id, title, body, time, is_watched);
 
     return res.status(200).json({
       status: true,

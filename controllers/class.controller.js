@@ -163,6 +163,7 @@ const getListClass = async (req, res, next) => {
           select: {
             id: true,
             title: true,
+            is_completed: true,
             videos: {
               select: {
                 id: true,
@@ -351,7 +352,7 @@ const createChapters = async (req, res, next) => {
 const updateChapter = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { title, videos } = req.body;
+    const { title, videos, is_completed } = req.body;
     VSCUpdateChapter.parse(req.body);
 
     const existingChapter = await queryChaptersById(id);
@@ -364,25 +365,36 @@ const updateChapter = async (req, res, next) => {
       });
     }
 
-    const updatedVideos = videos.map((element) => ({
+    const updatedVideos = videos?.map((element) => ({
       title: element.title,
       link: element.link,
       time: element.time,
     }));
 
-    const updatedChapter = await prisma.chapters.update({
-      where: {
-        id,
-      },
-      data: {
-        title,
-        videos: {
-          createMany: {
-            data: updatedVideos,
+    const updatedChapter = videos
+      ? await prisma.chapters.update({
+          where: {
+            id,
           },
-        },
-      },
-    });
+          data: {
+            title,
+            videos: {
+              createMany: {
+                data: updatedVideos,
+              },
+            },
+            is_completed,
+          },
+        })
+      : await prisma.chapters.update({
+          where: {
+            id,
+          },
+          data: {
+            title,
+            is_completed,
+          },
+        });
 
     res.status(200).json({
       status: true,

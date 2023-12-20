@@ -153,6 +153,7 @@ const VSCUpdateChapter = z.object({
       }),
     )
     .optional(),
+  is_completed: z.boolean({ invalid_type_error: "is_completed harus berupa boolean" }).optional(),
 });
 
 module.exports = {

@@ -1,4 +1,5 @@
 const prisma = require("../libs/prisma");
+const { queryClassById } = require("../utils/helpers/class");
 
 const createPaymentService = async (payment_method, class_id, user_id) => {
   await prisma.classes.update({
@@ -12,6 +13,28 @@ const createPaymentService = async (payment_method, class_id, user_id) => {
         },
       },
     },
+  });
+
+  const thisClass = await queryClassById(class_id);
+
+  console.log(thisClass?.chapters);
+
+  thisClass?.chapters?.map(async (chapter) => {
+    await prisma.completed.create({
+      data: {
+        chapter_id: chapter.id,
+        user_id,
+      },
+    });
+
+    chapter.videos?.map(async (video) => {
+      await prisma.watched.create({
+        data: {
+          video_id: video.id,
+          user_id,
+        },
+      });
+    });
   });
 
   return await prisma.payments.create({

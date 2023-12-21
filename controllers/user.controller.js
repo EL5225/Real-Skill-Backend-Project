@@ -3,6 +3,7 @@ const getPagination = require("../utils/pagination");
 const { VScreateNotification } = require("../libs/validation/user");
 const { queryUserById } = require("../utils/helpers/user");
 const { getAllUserService } = require("../services/user");
+const { watchedVideoService } = require("../services/video");
 
 // Mengambil data user berdasarkan id
 const getUserById = async (req, res, next) => {
@@ -122,9 +123,27 @@ const createNotifications = async (req, res, next) => {
   }
 };
 
+const watchedVideoUser = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { video_id } = req.params;
+
+    const watch = await watchedVideoService(video_id, user?.id);
+
+    return res.status(200).json({
+      status: true,
+      message: "Berhasil mengubah video yang ditonton",
+      data: watch,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   deleteUser,
   getAllUsers,
   getUserById,
   createNotifications,
+  watchedVideoUser,
 };

@@ -28,7 +28,6 @@ const getAllUserService = async (page, limit) => {
         },
       },
       class: true,
-
       created_at: true,
     },
   });

@@ -70,6 +70,50 @@ const authorizationHeader = (req, res, next) => {
             },
           },
         },
+        completed_chapters: {
+          orderBy: {
+            chapter: {
+              no_chapter: "asc",
+            },
+          },
+          select: {
+            is_completed: true,
+            chapter: {
+              select: {
+                id: true,
+                no_chapter: true,
+                title: true,
+                created_at: true,
+              },
+            },
+          },
+        },
+        watched_videos: {
+          orderBy: {
+            video: {
+              chapter: {
+                no_chapter: "asc",
+              },
+            },
+          },
+          select: {
+            is_watched: true,
+            video: {
+              select: {
+                id: true,
+                no_video: true,
+                title: true,
+                chapter: {
+                  select: {
+                    id: true,
+                    no_chapter: true,
+                    title: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
     next();

@@ -92,6 +92,10 @@ const VSCUpdateClass = z.object({
 });
 
 const VSCreateChapter = z.object({
+  no_chapter: z.number({
+    required_error: "no_chapter harus diisi",
+    invalid_type_error: "no_chapter harus berupa angka",
+  }),
   title: z
     .string({
       required_error: "title harus diisi",
@@ -127,6 +131,7 @@ const VSCreateChapter = z.object({
 });
 
 const VSCUpdateChapter = z.object({
+  no_chapter: z.number({ invalid_type_error: "no_chapter harus berupa angka" }).optional(),
   title: z
     .string({
       invalid_type_error: "title harus berupa string",

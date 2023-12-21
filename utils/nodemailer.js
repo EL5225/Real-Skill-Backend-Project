@@ -20,7 +20,7 @@ const sendEmail = async (to, subject, html) => {
       html,
     };
 
-    await transport.sendMail(mailOptions);
+    transport.sendMail(mailOptions);
   } catch (error) {
     console.log(error);
   }

@@ -162,15 +162,15 @@ const getListClass = async (req, res, next) => {
         chapters: {
           select: {
             id: true,
+            no_chapter: true,
             title: true,
-            is_completed: true,
             videos: {
               select: {
                 id: true,
+                no_video: true,
                 title: true,
                 link: true,
                 time: true,
-                is_watched: true,
               },
             },
           },
@@ -298,7 +298,7 @@ const deleteClass = async (req, res, next) => {
 // Fitur Membuat chapters berdasarkan id kelas
 const createChapters = async (req, res, next) => {
   try {
-    const { title, videos, class_id } = req.body;
+    const { no_chapter, title, videos, class_id } = req.body;
     VSCreateChapter.parse(req.body);
 
     const existingClass = await queryClassById(class_id);
@@ -312,6 +312,7 @@ const createChapters = async (req, res, next) => {
     }
 
     const newVideos = videos.map((element) => ({
+      no_video: element.no_video,
       title: element.title,
       link: element.link,
       time: element.time,
@@ -319,6 +320,7 @@ const createChapters = async (req, res, next) => {
 
     const chapters = await prisma.chapters.create({
       data: {
+        no_chapter,
         title,
         videos: {
           createMany: {
@@ -352,7 +354,7 @@ const createChapters = async (req, res, next) => {
 const updateChapter = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { title, videos, is_completed } = req.body;
+    const { no_chapter, title, videos } = req.body;
     VSCUpdateChapter.parse(req.body);
 
     const existingChapter = await queryChaptersById(id);
@@ -377,13 +379,13 @@ const updateChapter = async (req, res, next) => {
             id,
           },
           data: {
+            no_chapter,
             title,
             videos: {
               createMany: {
                 data: updatedVideos,
               },
             },
-            is_completed,
           },
         })
       : await prisma.chapters.update({
@@ -392,7 +394,6 @@ const updateChapter = async (req, res, next) => {
           },
           data: {
             title,
-            is_completed,
           },
         });
 

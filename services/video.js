@@ -117,8 +117,32 @@ const watchedVideoService = async (video_id, user_id) => {
   return video;
 };
 
+const newVideoService = async (class_id, new_videos) => {
+  const user = await prisma.user.findMany({
+    where: {
+      class: {
+        some: {
+          id: class_id,
+        },
+      },
+    },
+  });
+
+  user?.map(async (item) => {
+    new_videos?.map(async (video) => {
+      await prisma.watched.create({
+        data: {
+          video_id: video.id,
+          user_id: item?.id,
+        },
+      });
+    });
+  });
+};
+
 module.exports = {
   editVideoService,
   deleteVideoService,
   watchedVideoService,
+  newVideoService,
 };

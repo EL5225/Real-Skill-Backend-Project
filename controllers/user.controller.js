@@ -2,8 +2,9 @@ const prisma = require("../libs/prisma");
 const getPagination = require("../utils/pagination");
 const { VScreateNotification } = require("../libs/validation/user");
 const { queryUserById } = require("../utils/helpers/user");
-const { getAllUserService } = require("../services/user");
+const { getAllUserService, accessFreeClassService } = require("../services/user");
 const { watchedVideoService } = require("../services/video");
+const { queryClassById } = require("../utils/helpers/class");
 
 // Mengambil data user berdasarkan id
 const getUserById = async (req, res, next) => {
@@ -140,10 +141,37 @@ const watchedVideoUser = async (req, res, next) => {
   }
 };
 
+const accessFreeClass = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const { class_id } = req.params;
+
+    const freeClass = await queryClassById(class_id);
+
+    if (freeClass?.type_id !== 1) {
+      return res.status(400).json({
+        status: true,
+        message: "Bad request",
+        error: "Class ini bukan kelas gratis",
+      });
+    }
+
+    await accessFreeClassService(user.id, class_id);
+
+    return res.status(200).json({
+      status: true,
+      message: "Berhasil mengakses kelas gratis",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   deleteUser,
   getAllUsers,
   getUserById,
   createNotifications,
   watchedVideoUser,
+  accessFreeClass,
 };

@@ -7,12 +7,19 @@ const {
 } = require("../libs/validation/classes");
 const getPagination = require("../utils/pagination");
 const cloudinary = require("../libs/cloudinary");
-const { queryClassById, queryChaptersById, queryClassByCode } = require("../utils/helpers/class");
+const {
+  queryClassById,
+  queryChaptersById,
+  queryClassByCode,
+  queryClassByIdWithUser,
+} = require("../utils/helpers/class");
 const {
   deleteChapterService,
   updateChapterModuleService,
   createNewClassService,
 } = require("../services/class");
+const { newVideoService } = require("../services/video");
+const { queryUserById } = require("../utils/helpers/user");
 // Fitur Membuat kelas
 const createClass = async (req, res, next) => {
   try {
@@ -201,20 +208,57 @@ const getListClass = async (req, res, next) => {
 // Fitur Menemukan kelas berdasarkan id
 const getClassById = async (req, res, next) => {
   try {
+    const user = req.user;
     const { id } = req.params;
-    const classes = await queryClassById(id);
-    if (!classes) {
-      return res.status(404).json({
-        status: false,
-        message: "Bad Request",
-        error: "Id class tidak ditemukan",
+
+    const typeClass = await prisma?.types?.findFirst({
+      where: {
+        classes: {
+          some: {
+            id,
+          },
+        },
+      },
+    });
+
+    if (typeClass?.id === 1) {
+      const classes = await queryClassByIdWithUser(id, user.id);
+
+      if (!classes) {
+        return res.status(404).json({
+          status: false,
+          message: "Bad Request",
+          error: "Id class tidak ditemukan",
+        });
+      }
+      return res.status(200).json({
+        status: true,
+        message: "Berhasil mengambil class berdasarkan id",
+        data: classes,
+      });
+    } else {
+      const userPayment = await queryUserById(user.id);
+      const isUserPaid = userPayment?.payments?.find(
+        (payment) => payment?.class_id === id,
+      )?.is_paid;
+
+      const classes = isUserPaid
+        ? await queryClassByIdWithUser(id, user.id)
+        : await queryClassById(id);
+
+      if (!classes) {
+        return res.status(404).json({
+          status: false,
+          message: "Bad Request",
+          error: "Id class tidak ditemukan",
+        });
+      }
+      return res.status(200).json({
+        status: true,
+        message: "Berhasil mengambil class berdasarkan id",
+        data: classes,
       });
     }
-    res.status(200).json({
-      status: true,
-      message: "Berhasil mengambil class berdasarkan id",
-      data: classes,
-    });
   } catch (error) {
     next(error);
   }
@@ -338,7 +382,7 @@ const createChapters = async (req, res, next) => {
       },
     });
 
-    await updateChapterModuleService(class_id);
+    await updateChapterModuleService(class_id, chapters.id);
 
     res.status(201).json({
       status: true,
@@ -368,34 +412,50 @@ const updateChapter = async (req, res, next) => {
     }
 
     const updatedVideos = videos?.map((element) => ({
+      no_video: element.no_video,
       title: element.title,
       link: element.link,
       time: element.time,
     }));
 
-    const updatedChapter = videos
-      ? await prisma.chapters.update({
-          where: {
-            id,
+    let updatedChapter;
+
+    if (videos) {
+      updatedChapter = await prisma.chapters.update({
+        where: {
+          id,
+        },
+        data: {
+          no_chapter,
+          title,
+          videos: {
+            createMany: {
+              data: updatedVideos,
+            },
           },
-          data: {
-            no_chapter,
-            title,
-            videos: {
-              createMany: {
-                data: updatedVideos,
+        },
+        include: {
+          videos: {
+            where: {
+              no_video: {
+                in: updatedVideos.map((element) => element.no_video),
               },
             },
           },
-        })
-      : await prisma.chapters.update({
-          where: {
-            id,
-          },
-          data: {
-            title,
-          },
-        });
+        },
+      });
+
+      await newVideoService(updatedChapter.class_id, updatedChapter.videos);
+    } else {
+      updatedChapter = await prisma.chapters.update({
+        where: {
+          id,
+        },
+        data: {
+          title,
+        },
+      });
+    }
 
     res.status(200).json({
       status: true,

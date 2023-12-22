@@ -27,6 +27,43 @@ const queryClassById = async (id) => {
   });
 };
 
+const queryClassByIdWithUser = async (id, user_id) => {
+  return await prisma.classes.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      chapters: {
+        select: {
+          id: true,
+          no_chapter: true,
+          title: true,
+          created_at: true,
+          complete_status: {
+            where: {
+              user_id,
+            },
+          },
+          videos: {
+            select: {
+              id: true,
+              no_video: true,
+              title: true,
+              link: true,
+              time: true,
+              watch_status: {
+                where: {
+                  user_id,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
 const queryChaptersById = async (id) => {
   return await prisma.chapters.findUnique({
     where: {
@@ -104,4 +141,5 @@ module.exports = {
   queryChaptersById,
   queryClassByCode,
   queryAllClasses,
+  queryClassByIdWithUser,
 };

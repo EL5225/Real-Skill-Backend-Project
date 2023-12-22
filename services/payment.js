@@ -2,6 +2,24 @@ const prisma = require("../libs/prisma");
 const { queryClassById } = require("../utils/helpers/class");
 
 const createPaymentService = async (payment_method, class_id, user_id) => {
+  return await prisma.payments.create({
+    data: {
+      payment_method,
+      class: {
+        connect: {
+          id: class_id,
+        },
+      },
+      user: {
+        connect: {
+          id: user_id,
+        },
+      },
+    },
+  });
+};
+
+const updatePaymentService = async (user_id, class_id, payments) => {
   await prisma.classes.update({
     where: {
       id: class_id,
@@ -16,8 +34,6 @@ const createPaymentService = async (payment_method, class_id, user_id) => {
   });
 
   const thisClass = await queryClassById(class_id);
-
-  console.log(thisClass?.chapters);
 
   thisClass?.chapters?.map(async (chapter) => {
     await prisma.completed.create({
@@ -37,24 +53,6 @@ const createPaymentService = async (payment_method, class_id, user_id) => {
     });
   });
 
-  return await prisma.payments.create({
-    data: {
-      payment_method,
-      class: {
-        connect: {
-          id: class_id,
-        },
-      },
-      user: {
-        connect: {
-          id: user_id,
-        },
-      },
-    },
-  });
-};
-
-const updatePaymentService = async (class_id, payments) => {
   const id = payments?.find((payment) => payment?.class_id === class_id)?.id;
 
   return await prisma.payments.update({

@@ -30,14 +30,6 @@ const authorizationHeader = (req, res, next) => {
       });
     }
 
-    if (decoded.role !== "USER") {
-      return res.status(503).json({
-        status: false,
-        message: "Forbidden Resource",
-        error: "Akses ditolak",
-      });
-    }
-
     req.user = await prisma.user.findUnique({
       where: { id: decoded.id },
       select: {
@@ -66,50 +58,6 @@ const authorizationHeader = (req, res, next) => {
                 name: true,
                 code: true,
                 price: true,
-              },
-            },
-          },
-        },
-        completed_chapters: {
-          orderBy: {
-            chapter: {
-              no_chapter: "asc",
-            },
-          },
-          select: {
-            is_completed: true,
-            chapter: {
-              select: {
-                id: true,
-                no_chapter: true,
-                title: true,
-                created_at: true,
-              },
-            },
-          },
-        },
-        watched_videos: {
-          orderBy: {
-            video: {
-              chapter: {
-                no_chapter: "asc",
-              },
-            },
-          },
-          select: {
-            is_watched: true,
-            video: {
-              select: {
-                id: true,
-                no_video: true,
-                title: true,
-                chapter: {
-                  select: {
-                    id: true,
-                    no_chapter: true,
-                    title: true,
-                  },
-                },
               },
             },
           },

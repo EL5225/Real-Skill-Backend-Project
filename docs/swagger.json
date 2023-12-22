@@ -369,6 +369,37 @@
         }
       }
     },
+    "/users/class/access/free/{class_id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Membuat user bisa mengakses kelas grats",
+        "description": "Membuat user bisa mengakses kelas grats",
+        "operationId": "get-user-access-class",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "class_id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/profiles": {
       "put": {
         "tags": ["profiles"],
@@ -421,11 +452,6 @@
         "summary": "get all class",
         "description": "Mendapatkan semua data class | pagination",
         "operationId": "get-classes",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "parameters": [
           {
             "name": "page",
@@ -1331,6 +1357,10 @@
                   "items": {
                     "type": "object",
                     "properties": {
+                      "no_video": {
+                        "type": "integer",
+                        "example": 1
+                      },
                       "title": {
                         "type": "string",
                         "example": "Introduction to HTML"

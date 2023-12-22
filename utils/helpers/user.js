@@ -50,12 +50,7 @@ const queryUserById = async (id) => {
         },
       },
       class: true,
-      completed_chapters: true,
-      watched_videos: {
-        include: {
-          video: true,
-        },
-      },
+      payments: true,
       created_at: true,
     },
   });

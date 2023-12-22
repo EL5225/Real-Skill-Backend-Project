@@ -4,6 +4,7 @@ const {
   updatePaymentService,
   deletePaymentService,
 } = require("../services/payment");
+const { queryClassById } = require("../utils/helpers/class");
 const { findFirstPayment, queryPaymentById } = require("../utils/helpers/payment");
 
 const createPayment = async (req, res, next) => {
@@ -11,6 +12,15 @@ const createPayment = async (req, res, next) => {
     const user = req.user;
     const { payment_method, class_id } = req.body;
     VSCreatePayment.parse(req.body);
+
+    const thisClass = await queryClassById(class_id);
+
+    if (thisClass?.type_id !== 2) {
+      return res.status(400).json({
+        message: "Bad Request",
+        error: "Tidak bisa membeli kelas yang Gratis",
+      });
+    }
 
     const existingPayment = await findFirstPayment(class_id, user?.id);
 
@@ -37,10 +47,10 @@ const updatePayment = async (req, res, next) => {
     const user = req.user;
     const { class_id } = req.params;
 
-    await updatePaymentService(class_id, user?.payments);
+    await updatePaymentService(user?.id, class_id, user?.payments);
 
     return res.status(200).json({
-      message: "Pembayaran berhasil diupdate",
+      message: "Pembayaran berhasil dilakukan",
     });
   } catch (error) {
     next(error);
@@ -75,7 +85,15 @@ const deletePayment = async (req, res, next) => {
     const existingPayment = await queryPaymentById(id);
     if (!existingPayment) {
       return res.status(404).json({
-        message: "Data pembayaran tidak ditemukan",
+        message: "Not found",
+        error: "Data pembayaran tidak ditemukan",
+      });
+    }
+
+    if (existingPayment?.is_paid) {
+      return res.status(400).json({
+        message: "Bad Request",
+        error: "Tidak bisa menghapus pembayaran yang sudah dibayar",
       });
     }
 

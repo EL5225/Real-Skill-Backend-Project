@@ -78,8 +78,10 @@ const watchedVideoService = async (video_id, user_id) => {
 
   const user = await queryUserById(user_id);
 
-  const thisChapter = user?.watched_videos?.find((item) => item?.video?.id === video_id).video
+  const thisChapter = user?.watched_videos?.find((item) => item?.video?.id === video_id)?.video
     ?.chapter_id;
+
+  console.log(thisChapter);
 
   const chapterVideos = await prisma.videos.findMany({
     where: {
@@ -90,6 +92,9 @@ const watchedVideoService = async (video_id, user_id) => {
   const isWatchedVideos = user?.watched_videos?.filter(
     (item) => item?.is_watched === true && item?.video?.chapter_id === thisChapter,
   ).length;
+
+  console.log(isWatchedVideos);
+  console.log(chapterVideos?.length);
 
   if (chapterVideos?.length === isWatchedVideos) {
     await prisma.user.update({

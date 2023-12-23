@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://real-skills-dev-fgnc.2.sg-1.fl0.io/api"
+      "url": "http://localhost:3000/api"
     },
     {
       "url": "http://localhost:3000/api"
@@ -1299,44 +1299,31 @@
                   "format": "binary"
                 },
                 "name": {
-                  "type": "string",
-                  "example": "Web Development"
+                  "type": "string"
                 },
                 "code": {
-                  "type": "string",
-                  "example": "Realskills123"
+                  "type": "string"
                 },
                 "price": {
-                  "type": "number",
-                  "example": 100000
+                  "type": "number"
                 },
                 "author": {
-                  "type": "string",
-                  "example": "Realskills"
+                  "type": "string"
                 },
                 "about": {
-                  "type": "string",
-                  "example": " proses pembangunan dan pemeliharaan website. Proses ini bekerja di belakang layar untuk membuat website yang menarik dan berfungsi dengan baik guna meningkatkan user experience. Dalam web development, ada tiga hal utama yang harus dipelajari yaitu HTML, CSS, dan JavaScript"
+                  "type": "string"
                 },
                 "goals": {
-                  "type": "array",
-                  "example": [
-                    "1. Memahami HTML",
-                    "2. Memahami CSS",
-                    "3. Memahami JavaScript"
-                  ]
+                  "type": "array"
                 },
                 "category_id": {
-                  "type": "number",
-                  "example": 1
+                  "type": "number"
                 },
                 "type_id": {
-                  "type": "number",
-                  "example": 1
+                  "type": "number"
                 },
                 "level_id": {
-                  "type": "number",
-                  "example": 1
+                  "type": "number"
                 }
               }
             }

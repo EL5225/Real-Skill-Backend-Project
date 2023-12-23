@@ -10,7 +10,7 @@ const deleteChapterService = (id) => {
   return chapter;
 };
 
-const updateChapterModuleService = async (class_id) => {
+const updateChapterModuleService = async (class_id, chapter_id) => {
   const { _count } = await prisma.chapters.aggregate({
     where: {
       class_id,
@@ -19,6 +19,66 @@ const updateChapterModuleService = async (class_id) => {
       id: true,
     },
   });
+
+  if (!chapter_id) {
+    return;
+  }
+
+  const user = await prisma.user.findMany({
+    where: {
+      class: {
+        some: {
+          id: class_id,
+        },
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      class: {
+        where: {
+          chapters: {
+            some: {
+              id: chapter_id,
+            },
+          },
+        },
+        select: {
+          chapters: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (user.length !== 0) {
+    const videos = await prisma.videos.findMany({
+      where: {
+        chapter_id,
+      },
+    });
+
+    user?.map(async (user) => {
+      await prisma.completed.create({
+        data: {
+          chapter_id,
+          user_id: user.id,
+        },
+      });
+
+      videos?.map(async (video) => {
+        await prisma.watched.create({
+          data: {
+            video_id: video.id,
+            user_id: user.id,
+          },
+        });
+      });
+    });
+  }
 
   await prisma.classes.update({
     where: {

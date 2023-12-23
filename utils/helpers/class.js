@@ -9,16 +9,53 @@ const queryClassById = async (id) => {
       chapters: {
         select: {
           id: true,
+          no_chapter: true,
           title: true,
-          is_completed: true,
           created_at: true,
           videos: {
             select: {
               id: true,
+              no_video: true,
               title: true,
               link: true,
               time: true,
-              is_watched: true,
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
+const queryClassByIdWithUser = async (id, user_id) => {
+  return await prisma.classes.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      chapters: {
+        select: {
+          id: true,
+          no_chapter: true,
+          title: true,
+          created_at: true,
+          complete_status: {
+            where: {
+              user_id,
+            },
+          },
+          videos: {
+            select: {
+              id: true,
+              no_video: true,
+              title: true,
+              link: true,
+              time: true,
+              watch_status: {
+                where: {
+                  user_id,
+                },
+              },
             },
           },
         },
@@ -39,7 +76,6 @@ const queryChaptersById = async (id) => {
           title: true,
           link: true,
           time: true,
-          is_watched: true,
         },
       },
     },
@@ -56,7 +92,6 @@ const queryClassByCode = async (code) => {
         select: {
           id: true,
           title: true,
-          is_completed: true,
           created_at: true,
           videos: {
             select: {
@@ -64,7 +99,35 @@ const queryClassByCode = async (code) => {
               title: true,
               link: true,
               time: true,
-              is_watched: true,
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
+const queryAllClasses = async () => {
+  return await prisma.classes.findMany({
+    select: {
+      id: true,
+      name: true,
+      code: true,
+      category: true,
+      type: true,
+      level: true,
+      created_at: true,
+      chapters: {
+        select: {
+          id: true,
+          title: true,
+          created_at: true,
+          videos: {
+            select: {
+              id: true,
+              title: true,
+              link: true,
+              time: true,
             },
           },
         },
@@ -77,4 +140,6 @@ module.exports = {
   queryClassById,
   queryChaptersById,
   queryClassByCode,
+  queryAllClasses,
+  queryClassByIdWithUser,
 };

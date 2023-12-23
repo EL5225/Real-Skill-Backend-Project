@@ -49,7 +49,14 @@ const queryUserById = async (id) => {
           created_at: true,
         },
       },
+      completed_chapters: true,
+      watched_videos: {
+        include: {
+          video: true,
+        },
+      },
       class: true,
+      payments: true,
       created_at: true,
     },
   });

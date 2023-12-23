@@ -13,18 +13,20 @@ datasource db {
 }
 
 model User {
-  id            String          @id @default(uuid())
-  name          String?
-  email         String          @unique
-  password      String?
-  is_verified   Boolean         @default(false)
-  notifications Notifications[]
-  payments      Payments[]
-  class         Classes[]
-  role          Role            @default(USER)
-  admin_id      String?         @unique
-  profile       Profiles?
-  created_at    DateTime        @default(now())
+  id                 String          @id @default(uuid())
+  name               String?
+  email              String          @unique
+  password           String?
+  is_verified        Boolean         @default(false)
+  notifications      Notifications[]
+  payments           Payments[]
+  class              Classes[]
+  completed_chapters Completed[]
+  watched_videos     Watched[]
+  role               Role            @default(USER)
+  admin_id           String?         @unique
+  profile            Profiles?
+  created_at         DateTime        @default(now())
 }
 
 enum Role {
@@ -55,24 +57,26 @@ model Notifications {
 }
 
 model Videos {
-  id         String    @id @default(uuid())
-  title      String?
-  link       String?
-  time       Int?
-  is_watched Boolean   @default(false)
-  chapter    Chapters? @relation(fields: [chapter_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
-  chapter_id String?
-  created_at DateTime  @default(now())
+  id           String    @id @default(uuid())
+  no_video     Int?
+  title        String?
+  link         String?
+  time         Int?
+  chapter      Chapters? @relation(fields: [chapter_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  chapter_id   String?
+  created_at   DateTime  @default(now())
+  watch_status Watched[]
 }
 
 model Chapters {
-  id           String   @id @default(uuid())
-  title        String
-  videos       Videos[]
-  is_completed Boolean  @default(false)
-  class        Classes? @relation(fields: [class_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  class_id     String?
-  created_at   DateTime @default(now())
+  id              String      @id @default(uuid())
+  no_chapter      Int?
+  title           String
+  videos          Videos[]
+  class           Classes?    @relation(fields: [class_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  class_id        String?
+  created_at      DateTime    @default(now())
+  complete_status Completed[]
 }
 
 model Classes {
@@ -128,4 +132,24 @@ model Payments {
   user_id        String
   user           User     @relation(fields: [user_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
   created_at     DateTime @default(now())
+}
+
+model Watched {
+  is_watched Boolean @default(false)
+  video      Videos  @relation(fields: [video_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  video_id   String
+  user       User    @relation(fields: [user_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  user_id    String
+
+  @@id([video_id, user_id])
+}
+
+model Completed {
+  is_completed Boolean  @default(false)
+  chapter      Chapters @relation(fields: [chapter_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  chapter_id   String
+  user         User     @relation(fields: [user_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  user_id      String
+
+  @@id([chapter_id, user_id])
 }

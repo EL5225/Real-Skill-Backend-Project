@@ -6,7 +6,7 @@ const cloudinary = require("../libs/cloudinary");
 const updateProfile = async (req, res, next) => {
   try {
     const user = req.user;
-    const { name, phone_number } = req.body;
+    const { name, phone_number, country, city } = req.body;
 
     VSUpdateProfile.parse(req.body);
 
@@ -22,26 +22,33 @@ const updateProfile = async (req, res, next) => {
     const timestamp = Date.now();
     const public_id = `profile_${timestamp}_realskills`;
 
-    cloudinary.uploader
-      .upload_stream({ resource_type: "image", public_id }, async (err, result) => {
-        if (err) {
-          return res.status(500).json({
-            status: false,
-            message: "Internal Server Error",
-            error: err.message,
-          });
-        }
-        await prisma.profiles.update({
-          where: {
-            user_id: user.id,
-          },
-          data: {
-            profile_picture: result.secure_url,
-            phone_number,
-          },
-        });
-      })
-      .end(req.file.buffer);
+    const uploadImage = () => {
+      return new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream({ resource_type: "image", public_id }, async (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result.secure_url);
+            }
+          })
+          .end(req.file.buffer);
+      });
+    };
+
+    const uploadImageUrl = await uploadImage();
+
+    await prisma.profiles.update({
+      where: {
+        user_id: user.id,
+      },
+      data: {
+        profile_picture: uploadImageUrl,
+        phone_number,
+        country,
+        city,
+      },
+    });
 
     return res.status(200).json({
       status: true,

@@ -9,7 +9,7 @@ const {
   updateChapter,
   deleteChapter,
 } = require("../controllers/class.controller");
-const { guardAdmin } = require("../middlewares/auth");
+const { guardAdmin, authorizationHeader } = require("../middlewares/auth");
 const { imageUpload } = require("../libs/multer");
 const { editVideo, deleteVideo } = require("../controllers/video.controller");
 
@@ -17,8 +17,8 @@ const course = Router();
 
 course.get("/", getListClass);
 course.post("/", guardAdmin, imageUpload.single("class_image"), createClass);
-course.get("/:id", getClassById);
 course.put("/:id", guardAdmin, imageUpload.single("class_image"), updateClass);
+course.get("/:id", authorizationHeader, getClassById);
 course.delete("/:id", guardAdmin, deleteClass);
 
 // Chapters

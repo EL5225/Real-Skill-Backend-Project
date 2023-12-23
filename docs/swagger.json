@@ -356,6 +356,68 @@
         }
       }
     },
+    "/users/videos/watched/{video_id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Mengubah data video yang ditonton oleh user",
+        "description": "Mengubah data video yang ditonton oleh user. is_watched menjadi true",
+        "operationId": "get-user-watched-videos",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "video_id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/class/access/free/{class_id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Membuat user bisa mengakses kelas grats",
+        "description": "Membuat user bisa mengakses kelas grats",
+        "operationId": "get-user-access-class",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "class_id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
     "/profiles": {
       "put": {
         "tags": [
@@ -414,11 +476,6 @@
         "summary": "get all class",
         "description": "Mendapatkan semua data class | pagination",
         "operationId": "get-classes",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "parameters": [
           {
             "name": "page",
@@ -1293,6 +1350,10 @@
             "schema": {
               "type": "object",
               "properties": {
+                "no_chapter": {
+                  "type": "number",
+                  "example": 1
+                },
                 "title": {
                   "type": "string",
                   "example": "Introduction to Web Development"
@@ -1302,6 +1363,10 @@
                   "items": {
                     "type": "object",
                     "properties": {
+                      "no_video": {
+                        "type": "integer",
+                        "example": 1
+                      },
                       "title": {
                         "type": "string",
                         "example": "Introduction to HTML"
@@ -1333,6 +1398,10 @@
             "schema": {
               "type": "object",
               "properties": {
+                "no_chapter": {
+                  "type": "number",
+                  "example": 1
+                },
                 "title": {
                   "type": "string",
                   "example": "Introduction to Web Development"
@@ -1342,6 +1411,10 @@
                   "items": {
                     "type": "object",
                     "properties": {
+                      "no_video": {
+                        "type": "integer",
+                        "example": 1
+                      },
                       "title": {
                         "type": "string",
                         "example": "Introduction to HTML"

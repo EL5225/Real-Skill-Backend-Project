@@ -30,14 +30,6 @@ const authorizationHeader = (req, res, next) => {
       });
     }
 
-    if (decoded.role !== "USER") {
-      return res.status(503).json({
-        status: false,
-        message: "Forbidden Resource",
-        error: "Akses ditolak",
-      });
-    }
-
     req.user = await prisma.user.findUnique({
       where: { id: decoded.id },
       select: {

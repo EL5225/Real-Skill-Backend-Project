@@ -6,6 +6,7 @@ const {
   createNotifications,
   watchedVideoUser,
   accessFreeClass,
+  deleteNotification,
 } = require("../controllers/user.controller");
 const { guardAdmin, authorizationHeader } = require("../middlewares/auth");
 
@@ -17,5 +18,6 @@ user.delete("/:id", deleteUser);
 user.get("/videos/watched/:video_id", authorizationHeader, watchedVideoUser);
 user.get("/class/access/free/:class_id", authorizationHeader, accessFreeClass);
 user.post("/notifications", guardAdmin, createNotifications);
+user.delete("/notifications/:id", guardAdmin, deleteNotification);
 
 module.exports = user;

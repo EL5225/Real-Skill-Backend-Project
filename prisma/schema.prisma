@@ -7,9 +7,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -80,27 +80,28 @@ model Chapters {
 }
 
 model Classes {
-  id          String      @id @default(uuid())
-  image_url   String?
-  name        String?
-  code        String?     @unique
-  price       Int?        @default(0)
-  about       String?
-  goals       String[]
-  modules     Int?
-  author      String?
-  rating      Float?
-  category    Categories? @relation(fields: [category_id], references: [id], onUpdate: NoAction)
-  category_id Int?
-  chapters    Chapters[]
-  user        User[]
-  level       Levels?     @relation(fields: [level_id], references: [id], onUpdate: NoAction)
-  level_id    Int?
-  type        Types?      @relation(fields: [type_id], references: [id], onUpdate: NoAction)
-  type_id     Int?
-  payment     Payments[]
-  created_at  DateTime    @default(now())
-  updated_at  DateTime?   @updatedAt
+  id            String      @id @default(uuid())
+  image_url     String?
+  name          String?
+  code          String?     @unique
+  price         Int?        @default(0)
+  about         String?
+  goals         String[]
+  modules       Int?
+  author        String?
+  rating        Float?
+  prerequisites String[]
+  category      Categories? @relation(fields: [category_id], references: [id], onUpdate: NoAction)
+  category_id   Int?
+  chapters      Chapters[]
+  user          User[]
+  level         Levels?     @relation(fields: [level_id], references: [id], onUpdate: NoAction)
+  level_id      Int?
+  type          Types?      @relation(fields: [type_id], references: [id], onUpdate: NoAction)
+  type_id       Int?
+  payment       Payments[]
+  created_at    DateTime    @default(now())
+  updated_at    DateTime?   @updatedAt
 }
 
 model Categories {

@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api"
+      "url": "https://real-skills-dev-fgnc.2.sg-1.fl0.io/api"
     },
     {
       "url": "http://localhost:3000/api"
@@ -42,9 +42,7 @@
   "paths": {
     "/auth/register": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "create new user",
         "description": "register a new user",
         "operationId": "post-register-user",
@@ -101,9 +99,7 @@
     },
     "/auth/login": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "login user",
         "description": "login a new user",
         "operationId": "post-login-user",
@@ -169,9 +165,7 @@
     },
     "/auth/authenticated": {
       "get": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "get authenticated user",
         "description": "authenticated user",
         "operationId": "get-authenticated-user",
@@ -192,9 +186,7 @@
     },
     "/auth/forgot-password": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "forgot password user",
         "description": "forgot password user",
         "operationId": "post-forgot-password-user",
@@ -213,9 +205,7 @@
     },
     "/auth/reset-password": {
       "post": {
-        "tags": [
-          "auth"
-        ],
+        "tags": ["auth"],
         "summary": "reset password user",
         "description": "reset password user",
         "operationId": "post-reset-password-user",
@@ -244,9 +234,7 @@
     },
     "/users": {
       "get": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "get all user",
         "description": "Mendapatkan semua data user | pagination",
         "operationId": "get-users",
@@ -278,9 +266,7 @@
     },
     "/users/{id}": {
       "get": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "get user by id",
         "description": "Mendapatkan data user dengan id",
         "operationId": "get-user-by-id",
@@ -304,9 +290,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "delete user by id",
         "description": "Menghapus data user dengan id",
         "operationId": "delete-user-by-id",
@@ -332,9 +316,7 @@
     },
     "/users/notifications": {
       "post": {
-        "tags": [
-          "users"
-        ],
+        "tags": ["users"],
         "summary": "create user notifications",
         "description": "Membuat notifikasi hanya untuk user | pilih salah satu antara user_ids atau is_all_user. Jika ingin mengirim ke semua user, isi is_all_user dengan true. Jika ingin mengirim ke beberapa user, isi user_ids dengan id user yang ingin dikirim dalam bentu array, dan isi is_all_user dengan false. Notifikasi hanya akan muncul pada user yang sudah verifikasi akun",
         "operationId": "post-user-notifications",
@@ -349,6 +331,37 @@
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/notifications/{id}": {
+      "delete": {
+        "tags": ["users"],
+        "summary": "delete user notifications",
+        "description": "Menghapus notifikasi user",
+        "operationId": "delete-user-notifications",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
           },
           "400": {
             "description": "Bad Request"
@@ -420,9 +433,7 @@
     },
     "/profiles": {
       "put": {
-        "tags": [
-          "profiles"
-        ],
+        "tags": ["profiles"],
         "summary": "update data profile",
         "description": "Update data profile",
         "operationId": "put-profile",
@@ -446,9 +457,7 @@
     },
     "/classes": {
       "post": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "create data class",
         "description": "create data class",
         "operationId": "create-class",
@@ -470,9 +479,7 @@
         }
       },
       "get": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "get all class",
         "description": "Mendapatkan semua data class | pagination",
         "operationId": "get-classes",
@@ -532,9 +539,7 @@
     },
     "/classes/{id}": {
       "get": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "get class by id",
         "description": "Mendapatkan data class dengan id",
         "operationId": "get-class-by-id",
@@ -563,9 +568,7 @@
         }
       },
       "put": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "update data class by id",
         "description": "Update data class dengan id",
         "operationId": "put-class-by-id",
@@ -597,9 +600,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "delete class by id",
         "description": "Menghapus data class dengan id",
         "operationId": "delete-class-by-id",
@@ -630,9 +631,7 @@
     },
     "/classes/chapters": {
       "post": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "create data chapter",
         "description": "create data chapter",
         "operationId": "create-chapter",
@@ -656,9 +655,7 @@
     },
     "/classes/chapters/{id}": {
       "put": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "update chapter",
         "description": "update chapter by class_id",
         "operationId": "put-chapter-by-class_id",
@@ -693,9 +690,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "delete chapter",
         "description": "delete chapter by class_id",
         "operationId": "delete-chapter-by-class_id",
@@ -726,9 +721,7 @@
     },
     "/classes/chapters/videos/{id}": {
       "put": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "update video",
         "description": "update video by class_id",
         "operationId": "put-video-by-class_id",
@@ -760,9 +753,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "classes"
-        ],
+        "tags": ["classes"],
         "summary": "delete video",
         "description": "delete video by class_id",
         "operationId": "delete-video-by-class_id",
@@ -793,9 +784,7 @@
     },
     "/general/categories": {
       "get": {
-        "tags": [
-          "general"
-        ],
+        "tags": ["general"],
         "summary": "get categories class",
         "description": "get data categories",
         "operationId": "get-categories",
@@ -811,9 +800,7 @@
     },
     "/general/levels": {
       "get": {
-        "tags": [
-          "general"
-        ],
+        "tags": ["general"],
         "summary": "get levels class",
         "description": "get data levels",
         "operationId": "get-levels",
@@ -829,9 +816,7 @@
     },
     "/general/types": {
       "get": {
-        "tags": [
-          "general"
-        ],
+        "tags": ["general"],
         "summary": "get types class",
         "description": "get data types",
         "operationId": "get-types",
@@ -880,6 +865,25 @@
         "responses": {
           "200": {
             "description": "Pembayaran berhasil dibuat."
+          },
+          "400": {
+            "description": "Permintaan tidak valid."
+          }
+        }
+      },
+      "get": {
+        "tags": ["payments"],
+        "summary": "get all payments",
+        "description": "get all payments",
+        "operationId": "get-payments",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pembayaran ditemukan."
           },
           "400": {
             "description": "Permintaan tidak valid."
@@ -1254,10 +1258,13 @@
                 },
                 "goals": {
                   "type": "array",
+                  "example": ["1. Memahami HTML", "2. Memahami CSS", "3. Memahami JavaScript"]
+                },
+                "prerequisites": {
+                  "type": "array",
                   "example": [
-                    "1. Memahami HTML",
-                    "2. Memahami CSS",
-                    "3. Memahami JavaScript"
+                    "Paham dengan algoritma dan pemrograman",
+                    "Paham cara menggunakan VSCode"
                   ]
                 },
                 "category_id": {
@@ -1314,6 +1321,9 @@
                   "type": "string"
                 },
                 "goals": {
+                  "type": "array"
+                },
+                "prerequisites": {
                   "type": "array"
                 },
                 "category_id": {

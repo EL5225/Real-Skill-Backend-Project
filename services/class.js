@@ -103,6 +103,7 @@ const createNewClassService = async (props) => {
       goals: props?.goals,
       author: props?.author,
       rating: Number(rating),
+      prerequisites: props?.prerequisites,
       category: {
         connect: {
           id: Number(props?.category_id),

@@ -1,3 +1,4 @@
+const prisma = require("../libs/prisma");
 const { VSCreatePayment } = require("../libs/validation/payment");
 const {
   createPaymentService,
@@ -36,6 +37,23 @@ const createPayment = async (req, res, next) => {
     return res.status(200).json({
       message: "Pembayaran berhasil dibuat",
       data: newPayment,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getAllPayments = async (req, res, next) => {
+  try {
+    const payments = await prisma.payments.findMany({
+      include: {
+        class: true,
+      },
+    });
+
+    return res.status(200).json({
+      message: "Berhasil mengambil semua pembayaran",
+      data: payments,
     });
   } catch (error) {
     next(error);
@@ -111,6 +129,7 @@ const deletePayment = async (req, res, next) => {
 module.exports = {
   createPayment,
   updatePayment,
+  getAllPayments,
   getPaymentById,
   deletePayment,
 };

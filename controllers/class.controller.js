@@ -23,7 +23,18 @@ const { queryUserById } = require("../utils/helpers/user");
 // Fitur Membuat kelas
 const createClass = async (req, res, next) => {
   try {
-    const { name, code, price, about, goals, author, category_id, type_id, level_id } = req.body;
+    const {
+      name,
+      code,
+      price,
+      about,
+      goals,
+      prerequisites,
+      author,
+      category_id,
+      type_id,
+      level_id,
+    } = req.body;
     VSCreateClass.parse(req.body);
 
     const existClass = await queryClassByCode(code);
@@ -90,6 +101,10 @@ const createClass = async (req, res, next) => {
       ? goals
       : goals?.split(",")?.map((goal) => goal?.trim());
 
+    const parsedPrerequisites = Array.isArray(prerequisites)
+      ? prerequisites
+      : prerequisites?.split(",")?.map((pre) => pre?.trim());
+
     const timestamp = Date.now();
     const public_id = `class_${timestamp}_realskills`;
 
@@ -109,6 +124,7 @@ const createClass = async (req, res, next) => {
           price,
           about,
           goals: parsedGoals,
+          prerequisites: parsedPrerequisites,
           author,
           category_id,
           type_id,
@@ -268,8 +284,19 @@ const getClassById = async (req, res, next) => {
 const updateClass = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name, code, price, about, goals, author, modules, category_id, type_id, level_id } =
-      req.body;
+    const {
+      name,
+      code,
+      price,
+      about,
+      goals,
+      author,
+      prerequisites,
+      modules,
+      category_id,
+      type_id,
+      level_id,
+    } = req.body;
     VSCUpdateClass.parse(req.body);
 
     const existingClass = await queryClassById(id);
@@ -284,6 +311,10 @@ const updateClass = async (req, res, next) => {
     const parsedGoals = Array.isArray(goals)
       ? goals
       : goals?.split(",")?.map((goal) => goal?.trim());
+
+    const parsedPrerequisites = Array.isArray(prerequisites)
+      ? prerequisites
+      : prerequisites?.split(",")?.map((pre) => pre?.trim());
 
     if (req.file && req.file.buffer) {
       const timestamp = Date.now();
@@ -310,6 +341,9 @@ const updateClass = async (req, res, next) => {
               price: price ? Number(price) : existingClass.price,
               about: about ? about : existingClass.about,
               goals: parsedGoals ? parsedGoals : existingClass.goals,
+              prerequisites: parsedPrerequisites
+                ? parsedPrerequisites
+                : existingClass.prerequisites,
               author: author ? author : existingClass.author,
               modules: modules ? Number(modules) : existingClass.modules,
               category_id: category_id ? Number(category_id) : existingClass.category_id,
@@ -337,6 +371,7 @@ const updateClass = async (req, res, next) => {
           about: about ? about : existingClass.about,
           goals: parsedGoals ? parsedGoals : existingClass.goals,
           author: author ? author : existingClass.author,
+          prerequisites: parsedPrerequisites ? parsedPrerequisites : existingClass.prerequisites,
           modules: modules ? Number(modules) : existingClass.modules,
           category_id: category_id ? Number(category_id) : existingClass.category_id,
           type_id: type_id ? Number(type_id) : existingClass.type_id,

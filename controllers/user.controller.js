@@ -124,6 +124,26 @@ const createNotifications = async (req, res, next) => {
   }
 };
 
+const deleteNotification = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const notification = await prisma.notifications.delete({
+      where: {
+        id,
+      },
+    });
+
+    return res.status(200).json({
+      status: true,
+      message: "Berhasil menghapus notifikasi",
+      data: notification,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const watchedVideoUser = async (req, res, next) => {
   try {
     const user = req.user;
@@ -172,6 +192,7 @@ module.exports = {
   getAllUsers,
   getUserById,
   createNotifications,
+  deleteNotification,
   watchedVideoUser,
   accessFreeClass,
 };

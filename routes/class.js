@@ -17,8 +17,8 @@ const course = Router();
 
 course.get("/", getListClass);
 course.post("/", guardAdmin, imageUpload.single("class_image"), createClass);
+course.put("/:id", guardAdmin, imageUpload.single("class_image"), updateClass);
 course.get("/:id", authorizationHeader, getClassById);
-course.put("/:id", guardAdmin, updateClass);
 course.delete("/:id", guardAdmin, deleteClass);
 
 // Chapters

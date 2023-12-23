@@ -268,7 +268,8 @@ const getClassById = async (req, res, next) => {
 const updateClass = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name, code, price, about, author, modules, category_id, type_id, level_id } = req.body;
+    const { name, code, price, about, goals, author, modules, category_id, type_id, level_id } =
+      req.body;
     VSCUpdateClass.parse(req.body);
 
     const existingClass = await queryClassById(id);
@@ -280,28 +281,48 @@ const updateClass = async (req, res, next) => {
       });
     }
 
-    const updatedClass = await prisma.classes.update({
-      where: {
-        id,
-      },
-      data: {
-        name,
-        code,
-        price: Number(price),
-        about,
-        author,
-        modules: modules ? Number(modules) : existingClass.modules,
-        category_id: category_id ? Number(category_id) : existingClass.category_id,
-        type_id: type_id ? Number(type_id) : existingClass.type_id,
-        level_id: level_id ? Number(level_id) : existingClass.level_id,
-      },
-    });
+    const parsedGoals = Array.isArray(goals)
+      ? goals
+      : goals?.split(",")?.map((goal) => goal?.trim());
 
-    res.status(200).json({
-      status: true,
-      message: "Kelas berhasil diperbarui",
-      data: updatedClass,
-    });
+    const timestamp = Date.now();
+    const public_id = `class_${timestamp}_realskills`;
+
+    cloudinary.uploader
+      .upload_stream({ resource_type: "image", public_id }, async (err, result) => {
+        if (err) {
+          return res.status(500).json({
+            status: false,
+            message: "Internal Server Error",
+            error: err.message,
+          });
+        }
+
+        const updatedClass = await prisma.classes.update({
+          where: {
+            id,
+          },
+          data: {
+            image_url: result.secure_url ? result.secure_url : existingClass.image_url,
+            name,
+            code,
+            price: Number(price),
+            about,
+            goals: parsedGoals,
+            author,
+            modules: modules ? Number(modules) : existingClass.modules,
+            category_id: category_id ? Number(category_id) : existingClass.category_id,
+            type_id: type_id ? Number(type_id) : existingClass.type_id,
+            level_id: level_id ? Number(level_id) : existingClass.level_id,
+          },
+        });
+        res.status(200).json({
+          status: true,
+          message: "Berhasil memperbarui kelas",
+          data: updatedClass,
+        });
+      })
+      .end(req.file.buffer);
   } catch (error) {
     console.error(error);
     next(error);

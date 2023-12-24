@@ -137,7 +137,7 @@ const createClass = async (req, res, next) => {
           data: newClass,
         });
       })
-      .end(req.file.buffer);
+      .end(req?.file?.buffer);
   } catch (error) {
     next(error);
   }

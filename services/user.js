@@ -53,7 +53,7 @@ const accessFreeClassService = async (user_id, class_id) => {
   thisClass?.chapters?.map(async (chapter) => {
     await prisma.completed.create({
       data: {
-        chapter_id: chapter.id,
+        chapter_id: chapter?.id,
         user_id,
       },
     });

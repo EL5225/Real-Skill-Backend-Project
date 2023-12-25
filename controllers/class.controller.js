@@ -253,13 +253,13 @@ const getClassById = async (req, res, next) => {
         data: classes,
       });
     } else {
-      const userPayment = await queryUserById(user.id);
+      const userPayment = await queryUserById(user?.id);
       const isUserPaid = userPayment?.payments?.find(
         (payment) => payment?.class_id === id,
       )?.is_paid;
 
       const classes = isUserPaid
-        ? await queryClassByIdWithUser(id, user.id)
+        ? await queryClassByIdWithUser(id, user?.id)
         : await queryClassById(id);
 
       if (!classes) {

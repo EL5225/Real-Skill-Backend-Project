@@ -23,6 +23,12 @@ const queryClassById = async (id) => {
           },
         },
       },
+      user: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   });
 };

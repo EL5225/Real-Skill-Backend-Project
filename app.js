@@ -21,7 +21,12 @@ const customJs = [
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:3000", "https://real-skills.vercel.app"];
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://real-skills.vercel.app",
+  "http://localhost:8080",
+  "https://real-skills-dev-fgnc.2.sg-1.fl0.io",
+];
 
 app.use(
   cors({

@@ -176,6 +176,16 @@ const accessFreeClass = async (req, res, next) => {
       });
     }
 
+    const existingUser = freeClass?.user?.find((u) => u.id === user?.id);
+
+    if (existingUser) {
+      return res.status(400).json({
+        status: true,
+        message: "Bad request",
+        error: "Anda sudah mengakses kelas ini",
+      });
+    }
+
     await accessFreeClassService(user.id, class_id);
 
     return res.status(200).json({

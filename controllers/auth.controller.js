@@ -224,7 +224,7 @@ const authenticated = async (req, res, next) => {
     res.status(200).json({
       status: true,
       message: "User terverifikasi",
-      data: { user: user, classes, pagination },
+      data: { user, classes, pagination },
     });
   } catch (error) {
     next(error);

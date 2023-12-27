@@ -49,7 +49,11 @@ const getAllPayments = async (req, res, next) => {
       include: {
         class: {
           include: {
-            chapters: true,
+            chapters: {
+              include: {
+                videos: true,
+              },
+            },
           },
         },
       },

@@ -38,7 +38,15 @@ const authorizationHeader = (req, res, next) => {
         email: true,
         role: true,
         is_verified: true,
-        profile: true,
+        profile: {
+          select: {
+            id: true,
+            profile_picture: true,
+            phone_number: true,
+            country: true,
+            city: true,
+          },
+        },
         created_at: true,
         notifications: {
           select: {
@@ -48,47 +56,32 @@ const authorizationHeader = (req, res, next) => {
             created_at: true,
           },
         },
-        class: {
-          include: {
-            chapters: {
-              select: {
-                id: true,
-                no_chapter: true,
-                title: true,
-                created_at: true,
-                complete_status: {
-                  where: {
-                    user_id: decoded.id,
-                  },
-                  select: {
-                    is_completed: true,
-                  },
-                },
-                videos: {
+        payments: {
+          select: {
+            id: true,
+            is_paid: true,
+            payment_method: true,
+            payment_date: true,
+            class: {
+              include: {
+                chapters: {
                   select: {
                     id: true,
-                    no_video: true,
+                    no_chapter: true,
                     title: true,
-                    time: true,
-                    link: true,
-                    created_at: true,
-                    watch_status: {
-                      where: {
-                        user_id: decoded.id,
-                      },
+                    videos: {
                       select: {
-                        is_watched: true,
+                        id: true,
+                        no_video: true,
+                        title: true,
+                        link: true,
+                        time: true,
                       },
                     },
                   },
                 },
               },
             },
-          },
-        },
-        payments: {
-          include: {
-            class: true,
           },
         },
       },

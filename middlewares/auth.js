@@ -48,7 +48,44 @@ const authorizationHeader = (req, res, next) => {
             created_at: true,
           },
         },
-
+        class: {
+          include: {
+            chapters: {
+              select: {
+                id: true,
+                no_chapter: true,
+                title: true,
+                created_at: true,
+                complete_status: {
+                  where: {
+                    user_id: decoded.id,
+                  },
+                  select: {
+                    is_completed: true,
+                  },
+                },
+                videos: {
+                  select: {
+                    id: true,
+                    no_video: true,
+                    title: true,
+                    time: true,
+                    link: true,
+                    created_at: true,
+                    watch_status: {
+                      where: {
+                        user_id: decoded.id,
+                      },
+                      select: {
+                        is_watched: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         payments: {
           include: {
             class: true,

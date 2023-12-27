@@ -2,7 +2,7 @@ const { Prisma } = require("@prisma/client");
 const { ZodError } = require("zod");
 
 const prismaErrorHandler = (err, req, res, next) => {
-  const error = err.message.split("\n");
+  const error = err?.message?.split("\n");
 
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
     return res.status(400).json({

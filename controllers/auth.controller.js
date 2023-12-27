@@ -6,6 +6,7 @@ const { sendEmail } = require("../utils/nodemailer");
 const { emailTemplate } = require("../utils/email");
 const { queryUserByEmail, queryUserAdminId } = require("../utils/helpers/user");
 const { createUser } = require("../services/auth");
+const getPagination = require("../utils/pagination");
 const { JWT_SECRET } = process.env;
 
 // Register User
@@ -131,6 +132,10 @@ const login = async (req, res, next) => {
 const authenticated = async (req, res, next) => {
   try {
     const user = req.user;
+    let { search, category, type, level, limit = 5, page = 1 } = req.query;
+    limit = Number(limit);
+    page = Number(page);
+
     if (!user) {
       return res.status(404).json({
         status: false,
@@ -139,10 +144,87 @@ const authenticated = async (req, res, next) => {
       });
     }
 
+    const whereClause = {
+      user: {
+        some: {
+          id: user.id,
+        },
+      },
+      name: {
+        contains: search,
+        mode: "insensitive",
+      },
+      category_id: category
+        ? {
+            equals: Number(category),
+          }
+        : undefined,
+      type_id: type
+        ? {
+            equals: Number(type),
+          }
+        : undefined,
+      level_id: level
+        ? {
+            equals: Number(level),
+          }
+        : undefined,
+    };
+
+    const { _count } = await prisma.classes.aggregate({
+      where: whereClause,
+      _count: { id: true },
+    });
+
+    const classes = await prisma.classes.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      where: whereClause,
+
+      include: {
+        chapters: {
+          select: {
+            id: true,
+            no_chapter: true,
+            title: true,
+            created_at: true,
+            complete_status: {
+              where: {
+                user_id: user.id,
+              },
+              select: {
+                is_completed: true,
+              },
+            },
+            videos: {
+              select: {
+                id: true,
+                no_video: true,
+                title: true,
+                time: true,
+                link: true,
+                created_at: true,
+                watch_status: {
+                  where: {
+                    user_id: user.id,
+                  },
+                  select: {
+                    is_watched: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const pagination = getPagination(req, _count.id, page, limit);
+
     res.status(200).json({
       status: true,
       message: "User terverifikasi",
-      data: user,
+      data: { user: user, classes, pagination },
     });
   } catch (error) {
     next(error);

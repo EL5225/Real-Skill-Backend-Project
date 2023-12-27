@@ -170,11 +170,55 @@
       "get": {
         "tags": ["auth"],
         "summary": "get authenticated user",
-        "description": "authenticated user",
+        "description": "authenticated user | parameters digunakan untuk mengfilter class yg dimiliki oleh user",
         "operationId": "get-authenticated-user",
         "security": [
           {
             "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          },
+          {
+            "name": "limit",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          },
+          {
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          },
+          {
+            "name": "category",
+            "schema": {
+              "type": "number"
+            },
+            "in": "query"
+          },
+          {
+            "name": "type",
+            "schema": {
+              "type": "number"
+            },
+            "in": "query"
+          },
+          {
+            "name": "level",
+            "schema": {
+              "type": "number"
+            },
+            "in": "query"
           }
         ],
         "responses": {

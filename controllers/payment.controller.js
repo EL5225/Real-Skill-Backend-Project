@@ -47,7 +47,11 @@ const getAllPayments = async (req, res, next) => {
   try {
     const payments = await prisma.payments.findMany({
       include: {
-        class: true,
+        class: {
+          include: {
+            chapters: true,
+          },
+        },
       },
     });
 

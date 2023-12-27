@@ -62,6 +62,8 @@ const authorizationHeader = (req, res, next) => {
             is_paid: true,
             payment_method: true,
             payment_date: true,
+            class_id: true,
+            created_at: true,
             class: {
               include: {
                 chapters: {

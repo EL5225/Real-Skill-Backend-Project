@@ -1180,6 +1180,10 @@
             "schema": {
               "type": "object",
               "properties": {
+                "profile_picture": {
+                  "type": "string",
+                  "format": "binary"
+                },
                 "name": {
                   "type": "string",
                   "example": "Realskills"
@@ -1188,9 +1192,13 @@
                   "type": "string",
                   "example": "08123456789"
                 },
-                "profile_picture": {
+                "country": {
                   "type": "string",
-                  "format": "binary"
+                  "example": "Indonesia"
+                },
+                "city": {
+                  "type": "string",
+                  "example": "Bandung"
                 }
               }
             }

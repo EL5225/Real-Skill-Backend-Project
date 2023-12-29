@@ -9,7 +9,7 @@ const VSCreateClass = z.object({
     required_error: "code harus diisi",
     invalid_type_error: "code harus berupa string",
   }),
-  price: z.string().optional(),
+  price: z.number().optional(),
   about: z
     .string({
       required_error: "about harus diisi",
@@ -24,21 +24,21 @@ const VSCreateClass = z.object({
     .min(1, { message: "author harus diisi" }),
 
   category_id: z
-    .string({
+    .number({
       required_error: "category_id harus diisi",
-      invalid_type_error: "category_id harus berupa id (string)",
+      invalid_type_error: "category_id harus berupa id (number)",
     })
     .min(1, { message: "category_id harus diisi" }),
   level_id: z
-    .string({
+    .number({
       required_error: "level_id harus diisi",
-      invalid_type_error: "level_id harus berupa id (string)",
+      invalid_type_error: "level_id harus berupa id (number)",
     })
     .min(1, { message: "level_id harus diisi" }),
   type_id: z
-    .string({
+    .number({
       required_error: "type_id harus diisi",
-      invalid_type_error: "type_id harus berupa id (string)",
+      invalid_type_error: "type_id harus berupa id (number)",
     })
     .min(1, { message: "type_id harus diisi" }),
 });
@@ -50,21 +50,21 @@ const VSCUpdateClass = z.object({
   code: z.string({
     invalid_type_error: "code harus berupa string",
   }),
-  price: z.string().optional(),
+  price: z.number().optional(),
   about: z.string({
     invalid_type_error: "about harus berupa string",
   }),
   author: z.string({
     invalid_type_error: "author harus berupa string",
   }),
-  category_id: z.string({
-    invalid_type_error: "category_id harus berupa id (string)",
+  category_id: z.number({
+    invalid_type_error: "category_id harus berupa id (number)",
   }),
-  level_id: z.string({
-    invalid_type_error: "level_id harus berupa id (string)",
+  level_id: z.number({
+    invalid_type_error: "level_id harus berupa id (number)",
   }),
-  type_id: z.string({
-    invalid_type_error: "type_id harus berupa id (string)",
+  type_id: z.number({
+    invalid_type_error: "type_id harus berupa id (number)",
   }),
 });
 

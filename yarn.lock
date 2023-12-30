@@ -1955,17 +1955,17 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-swagger-ui-dist@>=4.11.0:
+swagger-ui-dist@>=5.0.0:
   version "5.10.5"
   resolved "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-5.10.5.tgz#a16e32465c49259045a745f6906fbdb37b4f7ef5"
   integrity sha512-Uv8E7hV/nXALQKgW86X1i58gl1O6DFg+Uq54sDwhYqucBBxj/47dLNw872TNILNlOTuPA6dRvUMGQdmlpaX8qQ==
 
-swagger-ui-express@^4.3.0:
-  version "4.6.3"
-  resolved "https://registry.yarnpkg.com/swagger-ui-express/-/swagger-ui-express-4.6.3.tgz#870d0892654fe80e6970a2d680e22521acd2dc19"
-  integrity sha512-CDje4PndhTD2HkgyKH3pab+LKspDeB/NhPN2OF1j+piYIamQqBYwAXWESOT1Yju2xFg51bRW9sUng2WxDjzArw==
+swagger-ui-express@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/swagger-ui-express/-/swagger-ui-express-5.0.0.tgz#7a00a18dd909574cb0d628574a299b9ba53d4d49"
+  integrity sha512-tsU9tODVvhyfkNSvf03E6FAk+z+5cU3lXAzMy6Pv4av2Gt2xA0++fogwC4qo19XuFf6hdxevPuVCSKFuMHJhFA==
   dependencies:
-    swagger-ui-dist ">=4.11.0"
+    swagger-ui-dist ">=5.0.0"
 
 tar@^6.1.11:
   version "6.2.0"

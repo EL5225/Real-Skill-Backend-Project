@@ -9,7 +9,7 @@ const VSCreateClass = z.object({
     required_error: "code harus diisi",
     invalid_type_error: "code harus berupa string",
   }),
-  price: z.number().optional(),
+  price: z.string().optional(),
   about: z
     .string({
       required_error: "about harus diisi",
@@ -24,48 +24,62 @@ const VSCreateClass = z.object({
     .min(1, { message: "author harus diisi" }),
 
   category_id: z
-    .number({
+    .string({
       required_error: "category_id harus diisi",
-      invalid_type_error: "category_id harus berupa id (number)",
+      invalid_type_error: "category_id harus berupa id (string)",
     })
     .min(1, { message: "category_id harus diisi" }),
   level_id: z
-    .number({
+    .string({
       required_error: "level_id harus diisi",
-      invalid_type_error: "level_id harus berupa id (number)",
+      invalid_type_error: "level_id harus berupa id (string)",
     })
     .min(1, { message: "level_id harus diisi" }),
   type_id: z
-    .number({
+    .string({
       required_error: "type_id harus diisi",
-      invalid_type_error: "type_id harus berupa id (number)",
+      invalid_type_error: "type_id harus berupa id (string)",
     })
     .min(1, { message: "type_id harus diisi" }),
 });
 
 const VSCUpdateClass = z.object({
-  name: z.string({
-    invalid_type_error: "name harus berupa string",
-  }),
-  code: z.string({
-    invalid_type_error: "code harus berupa string",
-  }),
-  price: z.number().optional(),
-  about: z.string({
-    invalid_type_error: "about harus berupa string",
-  }),
-  author: z.string({
-    invalid_type_error: "author harus berupa string",
-  }),
-  category_id: z.number({
-    invalid_type_error: "category_id harus berupa id (number)",
-  }),
-  level_id: z.number({
-    invalid_type_error: "level_id harus berupa id (number)",
-  }),
-  type_id: z.number({
-    invalid_type_error: "type_id harus berupa id (number)",
-  }),
+  name: z
+    .string({
+      invalid_type_error: "name harus berupa string",
+    })
+    .optional(),
+  code: z
+    .string({
+      invalid_type_error: "code harus berupa string",
+    })
+    .optional(),
+  price: z.string().optional(),
+  about: z
+    .string({
+      invalid_type_error: "about harus berupa string",
+    })
+    .optional(),
+  author: z
+    .string({
+      invalid_type_error: "author harus berupa string",
+    })
+    .optional(),
+  category_id: z
+    .string({
+      invalid_type_error: "category_id harus berupa id (string)",
+    })
+    .optional(),
+  level_id: z
+    .string({
+      invalid_type_error: "level_id harus berupa id (string)",
+    })
+    .optional(),
+  type_id: z
+    .string({
+      invalid_type_error: "type_id harus berupa id (string)",
+    })
+    .optional(),
 });
 
 const VSCreateChapter = z.object({

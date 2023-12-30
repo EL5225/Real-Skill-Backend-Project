@@ -202,10 +202,10 @@ const getListClass = async (req, res, next) => {
     });
 
     if (!classes || classes.length === 0) {
-      return res.status(404).json({
+      return res.status(200).json({
         status: false,
-        message: "Bad Request",
-        error: "kelas tidak ada",
+        message: "Kelas tidak ditemukan",
+        data: [],
       });
     }
 
@@ -301,7 +301,7 @@ const updateClass = async (req, res, next) => {
 
     const existingClass = await queryClassById(id);
     if (!existingClass) {
-      return res.status(404).json({
+      return res.status(400).json({
         status: false,
         message: "Bad Request",
         error: "Kelas tidak ditemukan",

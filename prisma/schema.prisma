@@ -2,10 +2,155 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id                 String          @id @default(uuid())
+  name               String?
+  email              String          @unique
+  password           String?
+  is_verified        Boolean         @default(false)
+  notifications      Notifications[]
+  payments           Payments[]
+  class              Classes[]
+  completed_chapters Completed[]
+  watched_videos     Watched[]
+  role               Role            @default(USER)
+  admin_id           String?         @unique
+  profile            Profiles?
+  created_at         DateTime        @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Profiles {
+  id              String   @id @default(uuid())
+  profile_picture String?
+  phone_number    String?  @unique
+  country         String?
+  city            String?
+  user_id         String   @unique
+  user            User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  updated_at      DateTime @default(now()) @updatedAt
+  created_at      DateTime @default(now())
+}
+
+model Notifications {
+  id         String   @id @default(uuid())
+  title      String
+  body       String
+  is_read    Boolean  @default(false)
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  created_at DateTime @default(now())
+}
+
+model Videos {
+  id           String    @id @default(uuid())
+  no_video     Int?
+  title        String?
+  link         String?
+  time         Int?
+  chapter      Chapters? @relation(fields: [chapter_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  chapter_id   String?
+  created_at   DateTime  @default(now())
+  watch_status Watched[]
+}
+
+model Chapters {
+  id              String      @id @default(uuid())
+  no_chapter      Int?
+  title           String
+  videos          Videos[]
+  class           Classes?    @relation(fields: [class_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  class_id        String?
+  created_at      DateTime    @default(now())
+  complete_status Completed[]
+}
+
+model Classes {
+  id            String      @id @default(uuid())
+  image_url     String?
+  name          String?
+  code          String?     @unique
+  price         Int?        @default(0)
+  about         String?
+  goals         String[]
+  modules       Int?
+  author        String?
+  rating        Float?
+  prerequisites String[]
+  category      Categories? @relation(fields: [category_id], references: [id], onUpdate: NoAction)
+  category_id   Int?
+  chapters      Chapters[]
+  user          User[]
+  level         Levels?     @relation(fields: [level_id], references: [id], onUpdate: NoAction)
+  level_id      Int?
+  type          Types?      @relation(fields: [type_id], references: [id], onUpdate: NoAction)
+  type_id       Int?
+  payment       Payments[]
+  created_at    DateTime    @default(now())
+  updated_at    DateTime?   @updatedAt
+}
+
+model Categories {
+  id      Int       @id
+  name    String    @unique
+  image   String?
+  classes Classes[]
+}
+
+model Levels {
+  id      Int       @id
+  name    String    @unique
+  classes Classes[]
+}
+
+model Types {
+  id      Int       @id
+  name    String    @unique
+  classes Classes[]
+}
+
+model Payments {
+  id             String   @id @default(uuid())
+  is_paid        Boolean  @default(false)
+  payment_method String
+  payment_date   DateTime @updatedAt
+  class_id       String
+  class          Classes  @relation(fields: [class_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  user_id        String
+  user           User     @relation(fields: [user_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  created_at     DateTime @default(now())
+}
+
+model Watched {
+  is_watched Boolean @default(false)
+  video      Videos  @relation(fields: [video_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  video_id   String
+  user       User    @relation(fields: [user_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  user_id    String
+
+  @@id([video_id, user_id])
+}
+
+model Completed {
+  is_completed Boolean  @default(false)
+  chapter      Chapters @relation(fields: [chapter_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  chapter_id   String
+  user         User     @relation(fields: [user_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  user_id      String
+
+  @@id([chapter_id, user_id])
 }

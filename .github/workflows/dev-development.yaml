@@ -18,4 +18,19 @@ jobs:
           node-version: 18.x
 
       - name: Install Dependencies
-        run: npm install
+        run: yarn install
+
+      - name: lint
+        run: yarn lint
+
+      - name: format
+        run: yarn pretty
+
+      - name: Run Prisma Migrate
+        run: yarn prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.PRISMA_DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.PRISMA_DIRECT_URL }}
+
+      - name: Run Prisma Generate
+        run: yarn prisma generate

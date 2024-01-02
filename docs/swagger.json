@@ -1,0 +1,1516 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "RealSkill API",
+    "description": "Final project backend BEJS 1 - FEJS 2 Binar Academy | RealSkill",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://real-skills-dev-fgnc.2.sg-1.fl0.io/api"
+    },
+    {
+      "url": "http://localhost:3000/api"
+    },
+    {
+      "url": "http://localhost:8080/api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Operations about authentication"
+    },
+    {
+      "name": "users",
+      "description": "Operations about user"
+    },
+    {
+      "name": "profiles",
+      "description": "Operations about profiles"
+    },
+    {
+      "name": "classes",
+      "description": "Operations about classes"
+    },
+    {
+      "name": "general",
+      "description": "Operations about general or public or common endpoint"
+    },
+    {
+      "name": "payments",
+      "description": "Operations about payments"
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "create new user",
+        "description": "register a new user",
+        "operationId": "post-register-user",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateUser"
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/BasicResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "example": "realskills"
+                            },
+                            "email": {
+                              "type": "string",
+                              "example": "l@gmail.com"
+                            },
+                            "role": {
+                              "type": "string",
+                              "example": "USER"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time",
+                              "example": "2022-01-01T00:00:00.000Z"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "login user",
+        "description": "login a new user",
+        "operationId": "post-login-user",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/LoginUser"
+        },
+        "responses": {
+          "200": {
+            "description": "Login Berhasil",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/BasicResponse"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "user": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "example": "Realskills"
+                                },
+                                "email": {
+                                  "type": "string",
+                                  "example": "l@gmail.com"
+                                },
+                                "role": {
+                                  "type": "string",
+                                  "example": "USER"
+                                },
+                                "createdAt": {
+                                  "type": "string",
+                                  "format": "date-time",
+                                  "example": "2022-01-01T00:00:00.000Z"
+                                }
+                              }
+                            },
+                            "token": {
+                              "type": "string",
+                              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwibmFtZSI6Ikx1dGF4aSIsImlhdCI6MTY1MjU0NjY5Nn0.2z7i9iJ1s1qT7Nj5wYD9s4jU7Rq5ZbXaM"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/auth/authenticated": {
+      "get": {
+        "tags": ["auth"],
+        "summary": "get authenticated user",
+        "description": "authenticated user | parameters digunakan untuk mengfilter class yg dimiliki oleh user",
+        "operationId": "get-authenticated-user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          },
+          {
+            "name": "limit",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          },
+          {
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          },
+          {
+            "name": "category",
+            "schema": {
+              "type": "number"
+            },
+            "in": "query"
+          },
+          {
+            "name": "type",
+            "schema": {
+              "type": "number"
+            },
+            "in": "query"
+          },
+          {
+            "name": "level",
+            "schema": {
+              "type": "number"
+            },
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "forgot password user",
+        "description": "forgot password user",
+        "operationId": "post-forgot-password-user",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ForgotPassword"
+        },
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/auth/reset-password": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "reset password user",
+        "description": "reset password user",
+        "operationId": "post-reset-password-user",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "token",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ResetPassword"
+        },
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["users"],
+        "summary": "get all user",
+        "description": "Mendapatkan semua data user | pagination",
+        "operationId": "get-users",
+        "parameters": [
+          {
+            "name": "page",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          },
+          {
+            "name": "limit",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "get user by id",
+        "description": "Mendapatkan data user dengan id",
+        "operationId": "get-user-by-id",
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["users"],
+        "summary": "delete user by id",
+        "description": "Menghapus data user dengan id",
+        "operationId": "delete-user-by-id",
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/notifications": {
+      "post": {
+        "tags": ["users"],
+        "summary": "create user notifications",
+        "description": "Membuat notifikasi hanya untuk user | pilih salah satu antara user_ids atau is_all_user. Jika ingin mengirim ke semua user, isi is_all_user dengan true. Jika ingin mengirim ke beberapa user, isi user_ids dengan id user yang ingin dikirim dalam bentu array, dan isi is_all_user dengan false. Notifikasi hanya akan muncul pada user yang sudah verifikasi akun",
+        "operationId": "post-user-notifications",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/createNotifications"
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/notifications/{id}": {
+      "delete": {
+        "tags": ["users"],
+        "summary": "delete user notifications",
+        "description": "Menghapus notifikasi user",
+        "operationId": "delete-user-notifications",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/videos/watched/{video_id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Mengubah data video yang ditonton oleh user",
+        "description": "Mengubah data video yang ditonton oleh user. is_watched menjadi true",
+        "operationId": "get-user-watched-videos",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "video_id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/class/access/free/{class_id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Membuat user bisa mengakses kelas grats",
+        "description": "Membuat user bisa mengakses kelas grats",
+        "operationId": "get-user-access-class",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "class_id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/profiles": {
+      "put": {
+        "tags": ["profiles"],
+        "summary": "update data profile",
+        "description": "Update data profile",
+        "operationId": "put-profile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateProfile"
+        },
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/classes": {
+      "post": {
+        "tags": ["classes"],
+        "summary": "create data class",
+        "description": "create data class",
+        "operationId": "create-class",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateClass"
+        },
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "get": {
+        "tags": ["classes"],
+        "summary": "get all class",
+        "description": "Mendapatkan semua data class | pagination",
+        "operationId": "get-classes",
+        "parameters": [
+          {
+            "name": "page",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          },
+          {
+            "name": "limit",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          },
+          {
+            "name": "search",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query"
+          },
+          {
+            "name": "category",
+            "schema": {
+              "type": "number"
+            },
+            "in": "query"
+          },
+          {
+            "name": "type",
+            "schema": {
+              "type": "number"
+            },
+            "in": "query"
+          },
+          {
+            "name": "level",
+            "schema": {
+              "type": "number"
+            },
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/classes/{id}": {
+      "get": {
+        "tags": ["classes"],
+        "summary": "get class by id",
+        "description": "Mendapatkan data class dengan id",
+        "operationId": "get-class-by-id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "put": {
+        "tags": ["classes"],
+        "summary": "update data class by id",
+        "description": "Update data class dengan id",
+        "operationId": "put-class-by-id",
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateClass"
+        },
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["classes"],
+        "summary": "delete class by id",
+        "description": "Menghapus data class dengan id",
+        "operationId": "delete-class-by-id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/classes/chapters": {
+      "post": {
+        "tags": ["classes"],
+        "summary": "create data chapter",
+        "description": "create data chapter",
+        "operationId": "create-chapter",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateChapter"
+        },
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/classes/chapters/{id}": {
+      "put": {
+        "tags": ["classes"],
+        "summary": "update chapter",
+        "description": "update chapter by class_id",
+        "operationId": "put-chapter-by-class_id",
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateChapter"
+        },
+        "responses": {
+          "200": {
+            "description": "Chapter berhasil diperbarui"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Chapter tidak ditemukan"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["classes"],
+        "summary": "delete chapter",
+        "description": "delete chapter by class_id",
+        "operationId": "delete-chapter-by-class_id",
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chapter berhasil di hapus"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/classes/chapters/videos/{id}": {
+      "put": {
+        "tags": ["classes"],
+        "summary": "update video",
+        "description": "update video by class_id",
+        "operationId": "put-video-by-class_id",
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateVideo"
+        },
+        "responses": {
+          "200": {
+            "description": "Video berhasil diperbarui"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["classes"],
+        "summary": "delete video",
+        "description": "delete video by class_id",
+        "operationId": "delete-video-by-class_id",
+        "parameters": [
+          {
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "in": "path",
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Video berhasil di hapus"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/general/categories": {
+      "get": {
+        "tags": ["general"],
+        "summary": "get categories class",
+        "description": "get data categories",
+        "operationId": "get-categories",
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/general/levels": {
+      "get": {
+        "tags": ["general"],
+        "summary": "get levels class",
+        "description": "get data levels",
+        "operationId": "get-levels",
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/general/types": {
+      "get": {
+        "tags": ["general"],
+        "summary": "get types class",
+        "description": "get data types",
+        "operationId": "get-types",
+        "responses": {
+          "200": {
+            "description": "OK!"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/payments": {
+      "post": {
+        "tags": ["payments"],
+        "summary": "create new payment",
+        "description": "create new payment.",
+        "operationId": "create-payment",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "payment_method": {
+                    "type": "string",
+                    "description": "Metode pembayaran yang digunakan."
+                  },
+                  "class_id": {
+                    "type": "string",
+                    "description": "ID kelas yang akan dibayar."
+                  }
+                },
+                "required": ["payment_method", "class_id"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Pembayaran berhasil dibuat."
+          },
+          "400": {
+            "description": "Permintaan tidak valid."
+          }
+        }
+      },
+      "get": {
+        "tags": ["payments"],
+        "summary": "get all payments",
+        "description": "get all payments",
+        "operationId": "get-payments",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pembayaran ditemukan."
+          },
+          "400": {
+            "description": "Permintaan tidak valid."
+          }
+        }
+      }
+    },
+    "/payments/paid/{class_id}": {
+      "get": {
+        "tags": ["payments"],
+        "summary": "update payment",
+        "description": "update payment user dari is_paid false menjadi true.",
+        "operationId": "update-payment",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "class_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pembayaran berhasil diperbarui."
+          },
+          "400": {
+            "description": "Permintaan tidak valid."
+          }
+        }
+      }
+    },
+    "/payments/{id}": {
+      "get": {
+        "tags": ["payments"],
+        "summary": "get payment by id",
+        "description": "get payment by id",
+        "operationId": "get-payment-by-id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pembayaran berhasil didapatkan."
+          },
+          "400": {
+            "description": "Permintaan tidak valid."
+          }
+        }
+      },
+      "delete": {
+        "tags": ["payments"],
+        "summary": "delete payment",
+        "description": "delete payment by id",
+        "operationId": "delete-payment-by-id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pembayaran berhasil dihapus."
+          },
+          "400": {
+            "description": "Permintaan tidak valid."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BasicResponse": {
+        "title": "BasicResponse",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "OK!"
+          }
+        }
+      },
+      "UserModel": {
+        "title": "UserModel",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "realskills"
+          },
+          "email": {
+            "type": "string",
+            "example": "l@gmail.com"
+          }
+        }
+      },
+      "Pagination": {
+        "title": "Pagination",
+        "type": "object",
+        "properties": {
+          "links": {
+            "type": "object",
+            "properties": {
+              "next": {
+                "type": "string",
+                "example": ""
+              },
+              "prev": {
+                "type": "string",
+                "example": ""
+              }
+            }
+          },
+          "totalItems": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "requestBodies": {
+      "CreateTransaction": {
+        "description": "Create Transaction body example",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sourceAccountNumber": {
+                  "type": "string",
+                  "example": "15ce16e7-44ee-476d-b8d0-def01da064d1"
+                },
+                "destinationAccountNumber": {
+                  "type": "string",
+                  "example": "00kg6e7-64fe-mk06-p034-iaj85damk0d1"
+                },
+                "amount": {
+                  "type": "number",
+                  "example": 100000
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateUser": {
+        "description": "Create User body example",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Realskills"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "realskill@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "Realskills123"
+                },
+                "confirm_password": {
+                  "type": "string",
+                  "example": "Realskills123"
+                },
+                "phone_number": {
+                  "type": "string",
+                  "example": "08123456789"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "LoginUser": {
+        "description": "Login body example",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "l@gmail.com"
+                },
+                "admin_id": {
+                  "type": "string",
+                  "example": "Realskillsadmin2023 (hanya untuk login admin)"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "Realskills123"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "ForgotPassword": {
+        "description": "Kirimkan salah satu antara email atau phone_number. Jangan dua-duanya",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "l@gmail.com"
+                },
+                "phone_number": {
+                  "type": "string",
+                  "example": "08123456789"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ResetPassword": {
+        "description": "Reset password body example",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "new_password": {
+                  "type": "string",
+                  "example": "Realskills123"
+                },
+                "confirm_new_password": {
+                  "type": "string",
+                  "example": "Realskills123"
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateProfile": {
+        "description": "Update profile body example, semuanya opsional",
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "profile_picture": {
+                  "type": "string",
+                  "format": "binary"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Realskills"
+                },
+                "phone_number": {
+                  "type": "string",
+                  "example": "08123456789"
+                },
+                "country": {
+                  "type": "string",
+                  "example": "Indonesia"
+                },
+                "city": {
+                  "type": "string",
+                  "example": "Bandung"
+                }
+              }
+            }
+          }
+        }
+      },
+      "createNotifications": {
+        "description": "Create notifications user",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "notification 1"
+                },
+                "body": {
+                  "type": "string",
+                  "example": "Promo terbaru kursus bulan ini"
+                },
+                "user_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "example": "00kg6e7-64fe-mk06-p034-iaj85damk0d1"
+                  }
+                },
+                "is_all_user": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateClass": {
+        "description": "Create class body example",
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "class_image": {
+                  "type": "string",
+                  "format": "binary"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Web Development"
+                },
+                "code": {
+                  "type": "string",
+                  "example": "Realskills123"
+                },
+                "price": {
+                  "type": "number",
+                  "example": 100000
+                },
+                "author": {
+                  "type": "string",
+                  "example": "Realskills"
+                },
+                "about": {
+                  "type": "string",
+                  "example": " proses pembangunan dan pemeliharaan website. Proses ini bekerja di belakang layar untuk membuat website yang menarik dan berfungsi dengan baik guna meningkatkan user experience. Dalam web development, ada tiga hal utama yang harus dipelajari yaitu HTML, CSS, dan JavaScript"
+                },
+                "goals": {
+                  "type": "array",
+                  "example": ["1. Memahami HTML", "2. Memahami CSS", "3. Memahami JavaScript"]
+                },
+                "prerequisites": {
+                  "type": "array",
+                  "example": [
+                    "Paham dengan algoritma dan pemrograman",
+                    "Paham cara menggunakan VSCode"
+                  ]
+                },
+                "category_id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "type_id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "level_id": {
+                  "type": "number",
+                  "example": 1
+                }
+              },
+              "required": [
+                "name",
+                "code",
+                "author",
+                "about",
+                "goals",
+                "category_id",
+                "type_id",
+                "level_id"
+              ]
+            }
+          }
+        }
+      },
+      "UpdateClass": {
+        "description": "Update class body example",
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "class_image": {
+                  "type": "string",
+                  "format": "binary"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "number"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "author": {
+                  "type": "string"
+                },
+                "about": {
+                  "type": "string"
+                },
+                "goals": {
+                  "type": "array"
+                },
+                "prerequisites": {
+                  "type": "array"
+                },
+                "category_id": {
+                  "type": "number"
+                },
+                "type_id": {
+                  "type": "number"
+                },
+                "level_id": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateChapter": {
+        "description": "Create chapter body example, time = waktu dalam menit",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "no_chapter": {
+                  "type": "number",
+                  "example": 1
+                },
+                "title": {
+                  "type": "string",
+                  "example": "Introduction to Web Development"
+                },
+                "videos": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "no_video": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "title": {
+                        "type": "string",
+                        "example": "Introduction to HTML"
+                      },
+                      "link": {
+                        "type": "string",
+                        "example": "https://realskillsacademy.com/html"
+                      },
+                      "time": {
+                        "type": "number",
+                        "example": 60
+                      }
+                    }
+                  }
+                },
+                "class_id": {
+                  "type": "string",
+                  "example": "15ce16e7-44ee-476d-b8d0-def01da064d1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateChapter": {
+        "description": "Update chapter body example",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "no_chapter": {
+                  "type": "number",
+                  "example": 1
+                },
+                "title": {
+                  "type": "string",
+                  "example": "Introduction to Web Development"
+                },
+                "videos": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "no_video": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "title": {
+                        "type": "string",
+                        "example": "Introduction to HTML"
+                      },
+                      "link": {
+                        "type": "string",
+                        "example": "https://realskillsacademy.com/html"
+                      },
+                      "time": {
+                        "type": "number",
+                        "example": 60
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateVideo": {
+        "description": "Update video body example",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "example": "Introduction to Web Development"
+                },
+                "link": {
+                  "type": "string",
+                  "example": "https://realskillsacademy.com/html"
+                },
+                "time": {
+                  "type": "number",
+                  "example": 60
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

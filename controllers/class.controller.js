@@ -241,7 +241,7 @@ const getClassById = async (req, res, next) => {
       const classes = await queryClassByIdWithUser(id, user.id);
 
       if (!classes) {
-        return res.status(404).json({
+        return res.status(400).json({
           status: false,
           message: "Bad Request",
           error: "Id class tidak ditemukan",
@@ -263,7 +263,7 @@ const getClassById = async (req, res, next) => {
         : await queryClassById(id);
 
       if (!classes) {
-        return res.status(404).json({
+        return res.status(400).json({
           status: false,
           message: "Bad Request",
           error: "Id class tidak ditemukan",

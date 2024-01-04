@@ -240,7 +240,7 @@ const emailTemplate = (url, name, description) => {
                                           <img
                                             align="center"
                                             border="0"
-                                            src="https://real-skills.vercel.app/static/media/logo.03ac72bcd7483790f1c4.png"
+                                            src="https://res.cloudinary.com/dbnzivsz9/image/upload/v1704209977/profile_1704209976956_realskills.png"
                                             alt=""
                                             title=""
                                             style="
@@ -252,8 +252,8 @@ const emailTemplate = (url, name, description) => {
                                               border: none;
                                               height: auto;
                                               float: none;
-                                              width: 12%;
-                                              max-width: 102px;
+                                              width: 100%;
+                                              max-width: 180px;
                                               margin: 10px 0;
                                             "
                                             width="102"

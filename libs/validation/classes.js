@@ -65,6 +65,7 @@ const VSCUpdateClass = z.object({
       invalid_type_error: "author harus berupa string",
     })
     .optional(),
+  rating: z.string().optional(),
   category_id: z
     .string({
       invalid_type_error: "category_id harus berupa id (string)",

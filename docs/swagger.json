@@ -1375,6 +1375,9 @@
                 "about": {
                   "type": "string"
                 },
+                "rating": {
+                  "type": "number"
+                },
                 "goals": {
                   "type": "array"
                 },

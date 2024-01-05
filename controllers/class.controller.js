@@ -292,6 +292,7 @@ const updateClass = async (req, res, next) => {
       goals,
       author,
       prerequisites,
+      rating,
       modules,
       category_id,
       type_id,
@@ -340,6 +341,7 @@ const updateClass = async (req, res, next) => {
               code: code ? code : existingClass.code,
               price: price ? Number(price) : existingClass.price,
               about: about ? about : existingClass.about,
+              rating: rating ? Number(rating) : existingClass.rating,
               goals: parsedGoals ? parsedGoals : existingClass.goals,
               prerequisites: parsedPrerequisites
                 ? parsedPrerequisites
@@ -370,6 +372,7 @@ const updateClass = async (req, res, next) => {
           price: price ? Number(price) : existingClass.price,
           about: about ? about : existingClass.about,
           goals: parsedGoals ? parsedGoals : existingClass.goals,
+          rating: rating ? Number(rating) : existingClass.rating,
           author: author ? author : existingClass.author,
           prerequisites: parsedPrerequisites ? parsedPrerequisites : existingClass.prerequisites,
           modules: modules ? Number(modules) : existingClass.modules,
